@@ -1,32 +1,22 @@
 {
-  "name": "qa-automation-portfolio",
+  "name": "qa-automation-lab",
   "version": "1.0.0",
-  "description": "A project for demonstrating qa automation skills",
+  "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "directories": {
+    "test": "tests"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/silaslangley1486-afk/qa-automation-portfolio.git"
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
-  "bugs": {
-    "url": "https://github.com/silaslangley1486-afk/qa-automation-portfolio/issues"
-  },
-  "homepage": "https://github.com/silaslangley1486-afk/qa-automation-portfolio#readme",
+  "type": "commonjs",
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.0",
-    "@types/node": "^24.10.1",
-    "axe-core": "^4.11.0",
-    "axios": "^1.13.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
-  },
-  "dependencies": {
-    "openai": "^6.9.1"
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^24.10.1"
   }
 }
