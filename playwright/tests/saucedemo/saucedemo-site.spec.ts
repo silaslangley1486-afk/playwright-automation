@@ -1,3 +1,5 @@
+// Auto// Auto-generated from Playwright's recording of my manual testing of the saucedemo.com site.
+
 import { test } from "@playwright/test";
 
 test("test", async ({ page }) => {
