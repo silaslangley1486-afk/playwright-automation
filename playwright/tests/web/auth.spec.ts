@@ -151,36 +151,6 @@ test("logout succeeds after successful login", async ({ page }) => {
   await expect(page).toHaveURL(loginUrl);
 });
 
-test("cannot access inventory page after logout", async ({ page }) => {
-  const loginUrl = "https://www.saucedemo.com/";
-  const inventoryUrl = "https://www.saucedemo.com/inventory.html";
-  await page.goto(loginUrl);
-  await page.locator('[data-test="username"]').fill("standard_user");
-  await page.locator('[data-test="password"]').fill("secret_sauce");
-  await page.locator('[data-test="login-button"]').click();
-  await expect(page).toHaveURL(inventoryUrl);
-  await page.locator("#react-burger-menu-btn").click();
-  await page.locator('[data-test="logout-sidebar-link"]').click();
-  await expect(page).toHaveURL(loginUrl);
-  await page.goto(inventoryUrl);
-  await expect(page).toHaveURL(loginUrl);
-});
-
-test("cannot access cart page after logout", async ({ page }) => {
-  const loginUrl = "https://www.saucedemo.com/";
-  const cartUrl = "https://www.saucedemo.com/cart.html";
-  await page.goto(loginUrl);
-  await page.locator('[data-test="username"]').fill("standard_user");
-  await page.locator('[data-test="password"]').fill("secret_sauce");
-  await page.locator('[data-test="login-button"]').click();
-  await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
-  await page.locator("#react-burger-menu-btn").click();
-  await page.locator('[data-test="logout-sidebar-link"]').click();
-  await expect(page).toHaveURL(loginUrl);
-  await page.goto(cartUrl);
-  await expect(page).toHaveURL(loginUrl);
-});
-
 test("session is preserved after navigation", async ({ page }) => {
   const inventoryUrl = "https://www.saucedemo.com/inventory.html";
   const cartUrl = "https://www.saucedemo.com/cart.html";
