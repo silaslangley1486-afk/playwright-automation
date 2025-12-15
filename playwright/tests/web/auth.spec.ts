@@ -44,10 +44,10 @@ test("successful login with valid credentials", async ({
   await expect(page).toHaveURL(inventoryUrl);
 });
 
-test("login fails with empty username", async ({ page, loginUrl }) => {
+test("login fails with empty username", async ({ page, loginUrl, user }) => {
   await page.goto(loginUrl);
   await page.locator('[data-test="username"]').fill("");
-  await page.locator('[data-test="password"]').fill("secret_sauce");
+  await page.locator('[data-test="password"]').fill(user.password);
   await page.locator('[data-test="login-button"]').click();
 
   const errorMessage = page.locator('[data-test="error"]');
@@ -57,9 +57,9 @@ test("login fails with empty username", async ({ page, loginUrl }) => {
   await expect(errorMessage).toContainText(/username is required/i);
 });
 
-test("login fails with empty password", async ({ page, loginUrl }) => {
+test("login fails with empty password", async ({ page, loginUrl, user }) => {
   await page.goto(loginUrl);
-  await page.locator('[data-test="username"]').fill("standard_user");
+  await page.locator('[data-test="username"]').fill(user.username);
   await page.locator('[data-test="password"]').fill("");
   await page.locator('[data-test="login-button"]').click();
 
@@ -70,9 +70,9 @@ test("login fails with empty password", async ({ page, loginUrl }) => {
   await expect(errorMessage).toContainText(/password is required/i);
 });
 
-test("login fails with wrong password", async ({ page, loginUrl }) => {
+test("login fails with wrong password", async ({ page, loginUrl, user }) => {
   await page.goto(loginUrl);
-  await page.locator('[data-test="username"]').fill("standard_user");
+  await page.locator('[data-test="username"]').fill(user.username);
   await page.locator('[data-test="password"]').fill("wrong_password");
   await page.locator('[data-test="login-button"]').click();
 
@@ -85,10 +85,10 @@ test("login fails with wrong password", async ({ page, loginUrl }) => {
   );
 });
 
-test("login fails with wrong username", async ({ page, loginUrl }) => {
+test("login fails with wrong username", async ({ page, loginUrl, user }) => {
   await page.goto(loginUrl);
   await page.locator('[data-test="username"]').fill("wrong_user");
-  await page.locator('[data-test="password"]').fill("secret_sauce");
+  await page.locator('[data-test="password"]').fill(user.password);
   await page.locator('[data-test="login-button"]').click();
 
   const errorMessage = page.locator('[data-test="error"]');
@@ -100,10 +100,10 @@ test("login fails with wrong username", async ({ page, loginUrl }) => {
   );
 });
 
-test("login fails with locked out user", async ({ page, loginUrl }) => {
+test("login fails with locked out user", async ({ page, loginUrl, user }) => {
   await page.goto(loginUrl);
   await page.fill('[data-test="username"]', "locked_out_user");
-  await page.fill('[data-test="password"]', "secret_sauce");
+  await page.fill('[data-test="password"]', user.password);
   await page.click('[data-test="login-button"]');
 
   const errorMessage = page.locator('[data-test="error"]');
@@ -147,7 +147,6 @@ test("logout succeeds after successful login", async ({
 
 test("session is preserved after navigation", async ({
   page,
-  loginUrl,
   inventoryUrl,
   cartUrl,
   login,
@@ -162,7 +161,6 @@ test("session is preserved after navigation", async ({
 
 test("session is preserved after page reload", async ({
   page,
-  loginUrl,
   inventoryUrl,
   login,
 }) => {
