@@ -24,7 +24,7 @@ export const test = base.extend<AuthFixtures>({
   user: async ({}, use) => {
     await use({
       username: "standard_user",
-      password: "secret_sauce",
+      password: "secret_sauce", // Password is public at https://www.saucedemo.com, so it can be safely added here.
     });
   },
 
