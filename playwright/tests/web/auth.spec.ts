@@ -116,9 +116,8 @@ test("login fails with locked out user", async ({ page, loginUrl, user }) => {
 test("cannot access inventory page without login", async ({
   page,
   loginUrl,
+  inventoryUrl,
 }) => {
-  const inventoryUrl = "https://www.saucedemo.com/inventory.html";
-
   await page.goto(inventoryUrl);
   await expect(page).toHaveURL(loginUrl);
 });
