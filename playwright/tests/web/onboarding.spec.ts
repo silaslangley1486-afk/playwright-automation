@@ -33,6 +33,7 @@ test("post-login landing shows at least one product card with product title and 
   await expect(
     firstProduct.locator('[data-test="inventory-item-name"]')
   ).toBeVisible();
+
   await expect(firstProductPrice).toBeVisible();
 
   // This regex handles optional commas and ensures exactly two decimal places for USD:

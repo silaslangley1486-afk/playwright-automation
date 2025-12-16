@@ -1,18 +1,16 @@
 import { test as base } from "@playwright/test";
+import { LoginPage } from "../models/login-page";
+import { trueUserName, truePassword } from "../constants/auth.constants";
+import type { User } from "../types/auth.types";
 
 export type AuthFixtures = {
-  loginUrl: string;
   inventoryUrl: string;
   cartUrl: string;
-  user: { username: string; password: string };
-  login: () => Promise<void>;
+  trueUser: User;
+  loginPage: LoginPage;
 };
 
 export const test = base.extend<AuthFixtures>({
-  loginUrl: async ({}, use) => {
-    await use("https://www.saucedemo.com/");
-  },
-
   inventoryUrl: async ({}, use) => {
     await use("https://www.saucedemo.com/inventory.html");
   },
@@ -21,21 +19,18 @@ export const test = base.extend<AuthFixtures>({
     await use("https://www.saucedemo.com/cart.html");
   },
 
-  user: async ({}, use) => {
+  trueUser: async ({}, use) => {
     await use({
-      username: "standard_user",
-      password: "secret_sauce", // Password is public at https://www.saucedemo.com, so it can be safely added here.
+      username: trueUserName,
+      password: truePassword,
     });
   },
 
-  login: async ({ page, loginUrl, inventoryUrl, user }, use) => {
-    await use(async () => {
-      await page.goto(loginUrl);
-      await page.locator('[data-test="username"]').fill(user.username);
-      await page.locator('[data-test="password"]').fill(user.password);
-      await page.locator('[data-test="login-button"]').click();
-      await page.waitForURL(inventoryUrl);
-    });
+  loginPage: async ({ page }, use) => {
+    const loginPage = new LoginPage(page);
+
+    await loginPage.navigateToLoginPage();
+    await use(loginPage);
   },
 });
 
