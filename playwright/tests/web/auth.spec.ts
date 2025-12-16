@@ -53,14 +53,11 @@ test("successful login with valid credentials", async ({
 
 test("login fails with empty username", async ({
   page,
-  trueUser,
+  emptyUsername,
   loginPage,
 }) => {
   loginPage;
-  await page.locator('[data-test="username"]').fill("");
-  await page.locator('[data-test="password"]').fill(trueUser.password);
-  await page.locator('[data-test="login-button"]').click();
-
+  await loginPage.login(emptyUsername);
   const errorMessage = page.locator('[data-test="error"]');
 
   await expect(page).toHaveURL(loginUrl);
@@ -70,14 +67,11 @@ test("login fails with empty username", async ({
 
 test("login fails with empty password", async ({
   page,
-  trueUser,
+  emptyPassword,
   loginPage,
 }) => {
   loginPage;
-  await page.locator('[data-test="username"]').fill(trueUser.username);
-  await page.locator('[data-test="password"]').fill("");
-  await page.locator('[data-test="login-button"]').click();
-
+  await loginPage.login(emptyPassword);
   const errorMessage = page.locator('[data-test="error"]');
 
   await expect(page).toHaveURL(loginUrl);
@@ -87,14 +81,11 @@ test("login fails with empty password", async ({
 
 test("login fails with wrong password", async ({
   page,
-  trueUser,
+  wrongPassword,
   loginPage,
 }) => {
   loginPage;
-  await page.locator('[data-test="username"]').fill(trueUser.username);
-  await page.locator('[data-test="password"]').fill(wrongPassword);
-  await page.locator('[data-test="login-button"]').click();
-
+  await loginPage.login(wrongPassword);
   const errorMessage = page.locator('[data-test="error"]');
 
   await expect(page).toHaveURL(loginUrl);
@@ -106,14 +97,11 @@ test("login fails with wrong password", async ({
 
 test("login fails with wrong username", async ({
   page,
-  trueUser,
+  wrongUsername,
   loginPage,
 }) => {
   loginPage;
-  await page.locator('[data-test="username"]').fill(wrongUserName);
-  await page.locator('[data-test="password"]').fill(trueUser.password);
-  await page.locator('[data-test="login-button"]').click();
-
+  await loginPage.login(wrongUsername);
   const errorMessage = page.locator('[data-test="error"]');
 
   await expect(page).toHaveURL(loginUrl);
@@ -142,7 +130,7 @@ test("cannot access inventory page without login", async ({ page }) => {
   await expect(page).toHaveURL(loginUrl);
 });
 
-test("cannot access cart page without login", async ({ page, cartUrl }) => {
+test("cannot access cart page without login", async ({ page }) => {
   await page.goto(cartUrl);
   await expect(page).toHaveURL(loginUrl);
 });
