@@ -79,13 +79,13 @@ test("login fails with empty password", async ({
   await expect(errorMessage).toContainText(/password is required/i);
 });
 
-test("login fails with wrong password", async ({
+test("login fails with wrong username", async ({
   page,
-  wrongPassword,
+  wrongUsername,
   loginPage,
 }) => {
   loginPage;
-  await loginPage.login(wrongPassword);
+  await loginPage.login(wrongUsername);
   const errorMessage = page.locator('[data-test="error"]');
 
   await expect(page).toHaveURL(loginUrl);
@@ -95,13 +95,13 @@ test("login fails with wrong password", async ({
   );
 });
 
-test("login fails with wrong username", async ({
+test("login fails with wrong password", async ({
   page,
-  wrongUsername,
+  wrongPassword,
   loginPage,
 }) => {
   loginPage;
-  await loginPage.login(wrongUsername);
+  await loginPage.login(wrongPassword);
   const errorMessage = page.locator('[data-test="error"]');
 
   await expect(page).toHaveURL(loginUrl);
