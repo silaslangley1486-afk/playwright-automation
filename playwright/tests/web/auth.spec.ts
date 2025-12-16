@@ -104,8 +104,6 @@ test("login fails with locked out user", async ({ page, loginUrl, user }) => {
   await page.goto(loginUrl);
   await page.locator('[data-test="username"]').fill("locked_out_user");
   await page.locator('[data-test="password"]').fill(user.password);
-  //await page.fill('[data-test="username"]', "locked_out_user");
-  // await page.fill('[data-test="password"]', user.password);
   await page.click('[data-test="login-button"]');
 
   const errorMessage = page.locator('[data-test="error"]');
