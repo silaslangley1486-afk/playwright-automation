@@ -1,5 +1,5 @@
 import { test, expect } from "../../fixtures/auth.fixture.js";
-import { loginUrl } from "../../constants/url.constants";
+import { loginUrl, inventoryUrl, cartUrl } from "../../constants/url.constants";
 
 test("username field is visible", async ({ page, loginPage }) => {
   loginPage;
@@ -38,7 +38,6 @@ test("login button is visible", async ({ page, loginPage }) => {
 
 test("successful login with valid credentials", async ({
   page,
-  inventoryUrl,
   trueUser,
   loginPage,
 }) => {
@@ -136,10 +135,7 @@ test("login fails with locked out user", async ({
   await expect(errorMessage).toContainText(/locked out/i);
 });
 
-test("cannot access inventory page without login", async ({
-  page,
-  inventoryUrl,
-}) => {
+test("cannot access inventory page without login", async ({ page }) => {
   await page.goto(inventoryUrl);
   await expect(page).toHaveURL(loginUrl);
 });
@@ -151,7 +147,6 @@ test("cannot access cart page without login", async ({ page, cartUrl }) => {
 
 test("logout succeeds after successful login", async ({
   page,
-  inventoryUrl,
   trueUser,
   loginPage,
 }) => {
@@ -165,8 +160,6 @@ test("logout succeeds after successful login", async ({
 
 test("session is preserved after navigation", async ({
   page,
-  inventoryUrl,
-  cartUrl,
   trueUser,
   loginPage,
 }) => {
@@ -181,7 +174,6 @@ test("session is preserved after navigation", async ({
 
 test("session is preserved after page reload", async ({
   page,
-  inventoryUrl,
   trueUser,
   loginPage,
 }) => {
