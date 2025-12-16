@@ -1,8 +1,8 @@
 import { test as base } from "@playwright/test";
 import { LoginPage } from "../models/login-page";
 import {
-  trueUserName,
-  truePassword,
+  validUserName,
+  validPassword,
   wrongUserName,
   wrongPassword,
   lockedOutUserName,
@@ -12,7 +12,7 @@ import type { User } from "../types/auth.types";
 export type AuthFixtures = {
   inventoryUrl: string;
   cartUrl: string;
-  trueUser: User;
+  validUser: User;
   emptyUsername: User;
   emptyPassword: User;
   wrongUsername: User;
@@ -22,23 +22,23 @@ export type AuthFixtures = {
 };
 
 export const test = base.extend<AuthFixtures>({
-  trueUser: async ({}, use) => {
+  validUser: async ({}, use) => {
     await use({
-      username: trueUserName,
-      password: truePassword,
+      username: validUserName,
+      password: validPassword,
     });
   },
 
   emptyUsername: async ({}, use) => {
     await use({
       username: "",
-      password: truePassword,
+      password: validPassword,
     });
   },
 
   emptyPassword: async ({}, use) => {
     await use({
-      username: trueUserName,
+      username: validUserName,
       password: "",
     });
   },
@@ -46,13 +46,13 @@ export const test = base.extend<AuthFixtures>({
   wrongUsername: async ({}, use) => {
     await use({
       username: wrongUserName,
-      password: truePassword,
+      password: validPassword,
     });
   },
 
   wrongPassword: async ({}, use) => {
     await use({
-      username: trueUserName,
+      username: validUserName,
       password: wrongPassword,
     });
   },
@@ -60,7 +60,7 @@ export const test = base.extend<AuthFixtures>({
   lockedOutUser: async ({}, use) => {
     await use({
       username: lockedOutUserName,
-      password: truePassword,
+      password: validPassword,
     });
   },
 

@@ -43,11 +43,11 @@ test("login button is visible", async ({ page, loginPage }) => {
 
 test("successful login with valid credentials", async ({
   page,
-  trueUser,
+  validUser,
   loginPage,
 }) => {
   loginPage;
-  await loginPage.login(trueUser);
+  await loginPage.login(validUser);
   await expect(page).toHaveURL(inventoryUrl);
 });
 
@@ -137,11 +137,11 @@ test("cannot access cart page without login", async ({ page }) => {
 
 test("logout succeeds after successful login", async ({
   page,
-  trueUser,
+  validUser,
   loginPage,
 }) => {
   loginPage;
-  await loginPage.login(trueUser);
+  await loginPage.login(validUser);
   await expect(page).toHaveURL(inventoryUrl);
   await page.locator("#react-burger-menu-btn").click();
   await page.locator('[data-test="logout-sidebar-link"]').click();
@@ -150,11 +150,11 @@ test("logout succeeds after successful login", async ({
 
 test("session is preserved after navigation", async ({
   page,
-  trueUser,
+  validUser,
   loginPage,
 }) => {
   loginPage;
-  await loginPage.login(trueUser);
+  await loginPage.login(validUser);
   await expect(page).toHaveURL(inventoryUrl);
   await page.goto(cartUrl);
   await expect(page).toHaveURL(cartUrl);
@@ -164,11 +164,11 @@ test("session is preserved after navigation", async ({
 
 test("session is preserved after page reload", async ({
   page,
-  trueUser,
+  validUser,
   loginPage,
 }) => {
   loginPage;
-  await loginPage.login(trueUser);
+  await loginPage.login(validUser);
   await expect(page).toHaveURL(inventoryUrl);
   await page.reload();
   await expect(page).toHaveURL(inventoryUrl);
