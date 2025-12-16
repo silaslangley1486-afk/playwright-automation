@@ -1,5 +1,10 @@
 import { test, expect } from "../../fixtures/auth.fixture.js";
 import { loginUrl, inventoryUrl, cartUrl } from "../../constants/url.constants";
+import {
+  wrongPassword,
+  wrongUserName,
+  lockedOutUserName,
+} from "../../constants/auth.constants.js";
 
 test("username field is visible", async ({ page, loginPage }) => {
   loginPage;
@@ -87,7 +92,7 @@ test("login fails with wrong password", async ({
 }) => {
   loginPage;
   await page.locator('[data-test="username"]').fill(trueUser.username);
-  await page.locator('[data-test="password"]').fill("wrong_password");
+  await page.locator('[data-test="password"]').fill(wrongPassword);
   await page.locator('[data-test="login-button"]').click();
 
   const errorMessage = page.locator('[data-test="error"]');
@@ -105,7 +110,7 @@ test("login fails with wrong username", async ({
   loginPage,
 }) => {
   loginPage;
-  await page.locator('[data-test="username"]').fill("wrong_user");
+  await page.locator('[data-test="username"]').fill(wrongUserName);
   await page.locator('[data-test="password"]').fill(trueUser.password);
   await page.locator('[data-test="login-button"]').click();
 
@@ -124,7 +129,7 @@ test("login fails with locked out user", async ({
   loginPage,
 }) => {
   loginPage;
-  await page.locator('[data-test="username"]').fill("locked_out_user");
+  await page.locator('[data-test="username"]').fill(lockedOutUserName);
   await page.locator('[data-test="password"]').fill(trueUser.password);
   await page.click('[data-test="login-button"]');
 
