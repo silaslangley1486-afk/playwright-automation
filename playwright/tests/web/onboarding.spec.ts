@@ -1,11 +1,12 @@
 import { test, expect } from "../../fixtures/auth.fixture.js";
+import { loginUrl, inventoryUrl } from "../../constants/url.constants";
 
 test("post-login landing shows main inventory page content", async ({
   page,
-  inventoryUrl,
-  login,
+  trueUser,
+  loginPage,
 }) => {
-  await login();
+  await loginPage.login(trueUser);
   await expect(page).toHaveURL(inventoryUrl);
   await expect(page.locator('[data-test="inventory-list"]')).toBeVisible();
   await expect(page.locator("#react-burger-menu-btn")).toBeVisible();
@@ -18,10 +19,10 @@ test("post-login landing shows main inventory page content", async ({
 
 test("post-login landing shows at least one product card with product title and price", async ({
   page,
-  inventoryUrl,
-  login,
+  trueUser,
+  loginPage,
 }) => {
-  await login();
+  await loginPage.login(trueUser);
   await expect(page).toHaveURL(inventoryUrl);
 
   const firstProduct = page.locator('[data-test="inventory-item"]').first();
@@ -46,10 +47,10 @@ test("post-login landing shows at least one product card with product title and 
 
 test("product details page opens when clicking a product title from inventory", async ({
   page,
-  inventoryUrl,
-  login,
+  trueUser,
+  loginPage,
 }) => {
-  await login();
+  await loginPage.login(trueUser);
   await expect(page).toHaveURL(inventoryUrl);
 
   const firstProduct = page.locator('[data-test="inventory-item"]').first();
@@ -76,10 +77,10 @@ test("product details page opens when clicking a product title from inventory", 
 
 test("shopping cart is initially empty upon first login", async ({
   page,
-  inventoryUrl,
-  login,
+  trueUser,
+  loginPage,
 }) => {
-  await login();
+  await loginPage.login(trueUser);
   await expect(page).toHaveURL(inventoryUrl);
 
   const cartBadge = page.locator('[data-test="shopping-cart-badge"]');
@@ -89,11 +90,10 @@ test("shopping cart is initially empty upon first login", async ({
 
 test("logout via side menu works correctly", async ({
   page,
-  loginUrl,
-  inventoryUrl,
-  login,
+  trueUser,
+  loginPage,
 }) => {
-  await login();
+  await loginPage.login(trueUser);
   await expect(page).toHaveURL(inventoryUrl);
   await page.locator("#react-burger-menu-btn").click();
   await page.locator('[data-test="logout-sidebar-link"]').click();
@@ -102,10 +102,10 @@ test("logout via side menu works correctly", async ({
 
 test("add to cart works correctly from inventory page", async ({
   page,
-  inventoryUrl,
-  login,
+  trueUser,
+  loginPage,
 }) => {
-  await login();
+  await loginPage.login(trueUser);
   await expect(page).toHaveURL(inventoryUrl);
 
   const firstProduct = page.locator('[data-test="inventory-item"]').first();
