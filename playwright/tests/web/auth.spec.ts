@@ -125,14 +125,11 @@ test("login fails with wrong username", async ({
 
 test("login fails with locked out user", async ({
   page,
-  trueUser,
+  lockedOutUser,
   loginPage,
 }) => {
   loginPage;
-  await page.locator('[data-test="username"]').fill(lockedOutUserName);
-  await page.locator('[data-test="password"]').fill(trueUser.password);
-  await page.click('[data-test="login-button"]');
-
+  await loginPage.login(lockedOutUser);
   const errorMessage = page.locator('[data-test="error"]');
 
   await expect(page).toHaveURL(loginUrl);
