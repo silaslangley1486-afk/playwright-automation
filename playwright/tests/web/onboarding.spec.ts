@@ -1,13 +1,12 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/auth.fixture.js";
 
 test("post-login landing shows main inventory page content", async ({
   page,
+  inventoryUrl,
+  login,
 }) => {
-  await page.goto("https://www.saucedemo.com/");
-  await page.locator('[data-test="username"]').fill("standard_user");
-  await page.locator('[data-test="password"]').fill("secret_sauce");
-  await page.locator('[data-test="login-button"]').click();
-  await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
+  await login();
+  await expect(page).toHaveURL(inventoryUrl);
   await expect(page.locator('[data-test="inventory-list"]')).toBeVisible();
   await expect(page.locator("#react-burger-menu-btn")).toBeVisible();
   await expect(page.locator('[data-test="title"]')).toBeVisible();
@@ -19,12 +18,11 @@ test("post-login landing shows main inventory page content", async ({
 
 test("post-login landing shows at least one product card with product title and price", async ({
   page,
+  inventoryUrl,
+  login,
 }) => {
-  await page.goto("https://www.saucedemo.com/");
-  await page.locator('[data-test="username"]').fill("standard_user");
-  await page.locator('[data-test="password"]').fill("secret_sauce");
-  await page.locator('[data-test="login-button"]').click();
-  await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
+  await login();
+  await expect(page).toHaveURL(inventoryUrl);
 
   const firstProduct = page.locator('[data-test="inventory-item"]').first();
   const firstProductPrice = firstProduct.locator(
@@ -47,12 +45,11 @@ test("post-login landing shows at least one product card with product title and 
 
 test("product details page opens when clicking a product title from inventory", async ({
   page,
+  inventoryUrl,
+  login,
 }) => {
-  await page.goto("https://www.saucedemo.com/");
-  await page.locator('[data-test="username"]').fill("standard_user");
-  await page.locator('[data-test="password"]').fill("secret_sauce");
-  await page.locator('[data-test="login-button"]').click();
-  await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
+  await login();
+  await expect(page).toHaveURL(inventoryUrl);
 
   const firstProduct = page.locator('[data-test="inventory-item"]').first();
   const firstProductNameLocator = firstProduct.locator(
@@ -76,37 +73,39 @@ test("product details page opens when clicking a product title from inventory", 
   await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
 });
 
-test("shopping cart is initially empty upon first login", async ({ page }) => {
-  await page.goto("https://www.saucedemo.com/");
-  await page.locator('[data-test="username"]').fill("standard_user");
-  await page.locator('[data-test="password"]').fill("secret_sauce");
-  await page.locator('[data-test="login-button"]').click();
-  await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
+test("shopping cart is initially empty upon first login", async ({
+  page,
+  inventoryUrl,
+  login,
+}) => {
+  await login();
+  await expect(page).toHaveURL(inventoryUrl);
 
   const cartBadge = page.locator('[data-test="shopping-cart-badge"]');
 
   await expect(cartBadge).toHaveCount(0);
 });
 
-test("logout via side menu works correctly", async ({ page }) => {
-  const loginUrl = "https://www.saucedemo.com/";
-
-  await page.goto(loginUrl);
-  await page.locator('[data-test="username"]').fill("standard_user");
-  await page.locator('[data-test="password"]').fill("secret_sauce");
-  await page.locator('[data-test="login-button"]').click();
-  await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
+test("logout via side menu works correctly", async ({
+  page,
+  loginUrl,
+  inventoryUrl,
+  login,
+}) => {
+  await login();
+  await expect(page).toHaveURL(inventoryUrl);
   await page.locator("#react-burger-menu-btn").click();
   await page.locator('[data-test="logout-sidebar-link"]').click();
   await expect(page).toHaveURL(loginUrl);
 });
 
-test("add to cart works correctly from inventory page", async ({ page }) => {
-  await page.goto("https://www.saucedemo.com/");
-  await page.locator('[data-test="username"]').fill("standard_user");
-  await page.locator('[data-test="password"]').fill("secret_sauce");
-  await page.locator('[data-test="login-button"]').click();
-  await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
+test("add to cart works correctly from inventory page", async ({
+  page,
+  inventoryUrl,
+  login,
+}) => {
+  await login();
+  await expect(page).toHaveURL(inventoryUrl);
 
   const firstProduct = page.locator('[data-test="inventory-item"]').first();
   const firstProductNameLocator = firstProduct.locator(
@@ -116,6 +115,7 @@ test("add to cart works correctly from inventory page", async ({ page }) => {
   const addToCartButton = firstProduct.locator(
     '[data-test="add-to-cart-sauce-labs-backpack"]'
   );
+
   await addToCartButton.click();
 
   const cartBadge = page.locator('[data-test="shopping-cart-badge"]');
