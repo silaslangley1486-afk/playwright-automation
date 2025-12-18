@@ -1,7 +1,18 @@
 import { test, expect } from "../../fixtures/auth.fixture.js";
 import { routes } from "../../constants/routes.js";
 
-test.describe("Login page", () => {
+test.describe("@smoke login", () => {
+  test("successful login with valid credentials", async ({
+    page,
+    validUser,
+    loginPage,
+  }) => {
+    await loginPage.login(validUser);
+    await expect(page).toHaveURL(routes.inventory);
+  });
+});
+
+test.describe("@regression login", () => {
   test("username field is visible", async ({ page, loginPage }) => {
     await expect(loginPage.usernameInput).toBeVisible();
   });
@@ -26,15 +37,6 @@ test.describe("Login page", () => {
 
   test("login button is visible", async ({ page, loginPage }) => {
     await expect(loginPage.loginButton).toBeVisible();
-  });
-
-  test("@smoke successful login with valid credentials", async ({
-    page,
-    validUser,
-    loginPage,
-  }) => {
-    await loginPage.login(validUser);
-    await expect(page).toHaveURL(routes.inventory);
   });
 
   test("login fails with empty username", async ({
