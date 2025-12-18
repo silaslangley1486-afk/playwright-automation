@@ -1,103 +1,150 @@
 import { test, expect } from "../../fixtures/auth.fixture.js";
 import { routes } from "../../constants/routes.js";
+import { InventoryPage } from "../../models/inventory-page";
+import { currencyRegex } from "../../constants/currrency.js";
 
-test("post-login landing shows main inventory page content", async ({
-  inventoryPage,
-}) => {
-  await inventoryPage.goto();
-  await expect(inventoryPage.inventoryList).toBeVisible();
-  await expect(inventoryPage.burgerMenuButton).toBeVisible();
-  await expect(inventoryPage.title).toBeVisible();
-  await expect(inventoryPage.cartLink).toBeVisible();
-  await expect(inventoryPage.sortContainer).toBeVisible();
-});
+test.describe("Onboarding / post-login", () => {
+  test("@smoke post-login landing shows main inventory page content", async ({
+    inventoryPage,
+  }) => {
+    await inventoryPage.goto();
+    await expect(inventoryPage.inventoryList).toBeVisible();
+    await expect(inventoryPage.burgerMenuButton).toBeVisible();
+    await expect(inventoryPage.title).toBeVisible();
+    await expect(inventoryPage.cartLink).toBeVisible();
+    await expect(inventoryPage.sortContainer).toBeVisible();
+  });
 
-test("post-login landing shows at least one product card with product title and price", async ({
-  inventoryPage,
-}) => {
-  await inventoryPage.goto();
+  test("post-login landing shows at least one product card with product title and price", async ({
+    inventoryPage,
+  }) => {
+    await inventoryPage.goto();
 
-  const firstProduct = inventoryPage.inventoryItem.first();
-  const firstProductPrice = firstProduct.locator(
-    '[data-test="inventory-item-price"]'
-  );
-  const priceText = await firstProductPrice.textContent();
+    expect(await inventoryPage.hasAProduct()).toBe(true);
+    expect(await inventoryPage.hasAProductNameAndPrice()).toBe(true);
 
-  await expect(
-    firstProduct.locator('[data-test="inventory-item-name"]')
-  ).toBeVisible();
+    // const firstProduct = inventoryPage.inventoryItem.first();
+    // const firstProductPrice = firstProduct.locator(
+    //   '[data-test="inventory-item-price"]'
+    // );
+    // const priceText = await firstProductPrice.textContent();
 
-  await expect(firstProductPrice).toBeVisible();
+    // await expect(
+    //   firstProduct.locator('[data-test="inventory-item-name"]')
+    // ).toBeVisible();
 
-  // This regex handles optional commas and ensures exactly two decimal places for USD:
-  // ^\$\d{1,3}(,\d{3})*(\.\d{2})?$
-  // Note: Escaped slashes are needed in JS strings for some regex characters.
-  const currencyRegex = /^\$\d{1,3}(,\d{3})*(\.\d{2})?$/;
+    // await expect(firstProductPrice).toBeVisible();
 
-  expect(priceText).toMatch(currencyRegex);
-});
+    const priceText = await inventoryPage.getFirstProductPrice();
 
-test("product details page opens when clicking a product title from inventory", async ({
-  inventoryPage,
-}) => {
-  await inventoryPage.goto();
+    // This regex handles optional commas and ensures exactly two decimal places for USD:
+    // ^\$\d{1,3}(,\d{3})*(\.\d{2})?$
+    // Note: Escaped slashes are needed in JS strings for some regex characters.
+    // const currencyRegex = /^\$\d{1,3}(,\d{3})*(\.\d{2})?$/;
 
-  const firstProduct = inventoryPage.inventoryItem.first();
-  const firstProductNameLocator = firstProduct.locator(
-    '[data-test="inventory-item-name"]'
-  );
-  const firstProductName = await firstProductNameLocator.textContent();
+    expect(priceText).toMatch(currencyRegex);
+  });
 
-  await firstProductNameLocator.click();
-  await expect(inventoryPage.page).toHaveURL(
-    new RegExp(`${routes.inventoryItem}\\?id=\\d+$`)
-  );
+  test("product details page opens when clicking a product title from inventory", async ({
+    inventoryPage,
+  }) => {
+    await inventoryPage.goto();
 
-  const productTitleText = await inventoryPage.productTitle.textContent();
-  const backToProductsButton = inventoryPage.backToProductsButton;
+    const firstProductName = await inventoryPage.getFirstProductName();
 
-  await expect(inventoryPage.productTitle).toBeVisible();
-  await expect(backToProductsButton).toBeVisible();
-  expect(productTitleText).toBe(firstProductName);
-  await backToProductsButton.click();
-  await expect(inventoryPage.page).toHaveURL(routes.inventory);
-});
+    await inventoryPage.openFirstProductDetails();
+    await expect(inventoryPage.page).toHaveURL(
+      new RegExp(`${routes.inventoryItem}\\?id=\\d+$`)
+    );
 
-test("cart is empty for authenticated user", async ({ inventoryPage }) => {
-  await inventoryPage.goto();
-  await expect(inventoryPage.shoppingCartBadge).toHaveCount(0);
-});
+    await expect(inventoryPage.productTitle).toBeVisible();
+    await expect(inventoryPage.backToProductsButton).toBeVisible();
+    await expect(inventoryPage.productTitle).toHaveText(firstProductName);
+    await inventoryPage.backToProductsButton.click();
+    await expect(inventoryPage.page).toHaveURL(routes.inventory);
 
-test("logout via side menu works correctly", async ({ inventoryPage }) => {
-  await inventoryPage.goto();
-  await inventoryPage.logout();
-  await expect(inventoryPage.page).toHaveURL(routes.login);
-});
+    // const firstProduct = inventoryPage.inventoryItem.first();
+    // const firstProductNameLocator = firstProduct.locator(
+    //   '[data-test="inventory-item-name"]'
+    // );
+    // const firstProductName = await firstProductNameLocator.textContent();
 
-test("add to cart works correctly from inventory page", async ({
-  inventoryPage,
-}) => {
-  await inventoryPage.goto();
+    // await firstProductNameLocator.click();
+    // await expect(inventoryPage.page).toHaveURL(
+    //   new RegExp(`${routes.inventoryItem}\\?id=\\d+$`)
+    // );
 
-  const firstProduct = inventoryPage.inventoryItem.first();
-  const firstProductNameLocator = firstProduct.locator(
-    '[data-test="inventory-item-name"]'
-  );
-  const firstProductName = await firstProductNameLocator.textContent();
-  const addToCartButton = firstProduct.locator(
-    '[data-test="add-to-cart-sauce-labs-backpack"]'
-  );
+    // const productTitleText = await inventoryPage.productTitle.textContent();
+    // const backToProductsButton = inventoryPage.backToProductsButton;
 
-  await addToCartButton.click();
-  await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
-  await inventoryPage.shoppingCartLink.click();
-  await expect(inventoryPage.page).toHaveURL(routes.cart);
+    // await expect(inventoryPage.productTitle).toBeVisible();
+    // await expect(backToProductsButton).toBeVisible();
+    // expect(productTitleText).toBe(firstProductName);
+    // await backToProductsButton.click();
+    // await expect(inventoryPage.page).toHaveURL(routes.inventory);
+  });
 
-  const cartItem = inventoryPage.inventoryItem.first();
-  const cartItemNameLocator = cartItem.locator(
-    '[data-test="inventory-item-name"]'
-  );
-  const cartItemName = await cartItemNameLocator.textContent();
+  test("cart is empty for authenticated user", async ({ inventoryPage }) => {
+    await inventoryPage.goto();
+    await expect(inventoryPage.shoppingCartBadge).toHaveCount(0);
+  });
 
-  expect(cartItemName).toBe(firstProductName);
+  test("@smoke logout via side menu works correctly", async ({
+    inventoryPage,
+  }) => {
+    await inventoryPage.goto();
+    await inventoryPage.logout();
+    await expect(inventoryPage.page).toHaveURL(routes.login);
+  });
+
+  test("@smoke add to cart works correctly from inventory page", async ({
+    inventoryPage,
+  }) => {
+    await inventoryPage.goto();
+
+    // const firstProduct = inventoryPage.inventoryItem.first();
+    // const firstProductNameLocator = firstProduct.locator(
+    //   '[data-test="inventory-item-name"]'
+    // );
+    // const firstProductName = await firstProductNameLocator.textContent();
+    // const addToCartButton = firstProduct.locator(
+    //   '[data-test="add-to-cart-sauce-labs-backpack"]'
+    // );
+
+    // await addToCartButton.click();
+
+    const firstProductName = await inventoryPage.getFirstProductName();
+
+    await inventoryPage.addToCart();
+    await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
+    await inventoryPage.shoppingCartLink.click();
+    await expect(inventoryPage.page).toHaveURL(routes.cart);
+    expect(await inventoryPage.hasRemoveButton()).toBe(true);
+
+    const cartItemName = await inventoryPage.getFirstCartItemName();
+
+    expect(cartItemName).toBe(firstProductName);
+
+    // const cartItem = inventoryPage.inventoryItem.first();
+    // const cartItemNameLocator = cartItem.locator(
+    //   '[data-test="inventory-item-name"]'
+    // );
+    // const cartItemName = await cartItemNameLocator.textContent();
+  });
+
+  test("@smoke user can login, add first product to cart, and logout", async ({
+    validUser,
+    loginPage,
+  }) => {
+    await loginPage.login(validUser);
+    await expect(loginPage.page).toHaveURL(routes.inventory);
+
+    const inventoryPage = new InventoryPage(loginPage.page);
+
+    await expect(inventoryPage.inventoryList).toBeVisible();
+    await inventoryPage.addToCart();
+    await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
+    await inventoryPage.logout();
+    await expect(inventoryPage.page).toHaveURL(routes.login);
+  });
 });

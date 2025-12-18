@@ -3,7 +3,7 @@ import { routes } from "../constants/routes";
 import type { User } from "../types/auth.types";
 
 export class LoginPage {
-  private page: Page;
+  readonly page: Page;
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
