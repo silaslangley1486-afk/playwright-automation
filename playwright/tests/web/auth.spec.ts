@@ -1,44 +1,30 @@
 import { test, expect } from "../../fixtures/auth.fixture.js";
-import { loginUrl, inventoryUrl, cartUrl } from "../../constants/url.constants";
-import {
-  wrongPassword,
-  wrongUserName,
-  lockedOutUserName,
-} from "../../constants/auth.constants.js";
+import { routes } from "../../constants/routes.js";
 
 test("username field is visible", async ({ page, loginPage }) => {
-  loginPage;
-  const usernameField = page.locator('[data-test="username"]');
-
-  await expect(usernameField).toBeVisible();
+  await expect(loginPage.usernameInput).toBeVisible();
 });
 
 test("password field is visible", async ({ page, loginPage }) => {
-  loginPage;
-  const passwordField = page.locator('[data-test="password"]');
-
-  await expect(passwordField).toBeVisible();
+  await expect(loginPage.passwordInput).toBeVisible();
 });
 
 test("username placeholder is correct", async ({ page, loginPage }) => {
-  loginPage;
-  const usernameField = page.locator('[data-test="username"]');
-
-  await expect(usernameField).toHaveAttribute("placeholder", "Username");
+  await expect(loginPage.usernameInput).toHaveAttribute(
+    "placeholder",
+    "Username"
+  );
 });
 
 test("password placeholder is correct", async ({ page, loginPage }) => {
-  loginPage;
-  const passwordField = page.locator('[data-test="password"]');
-
-  await expect(passwordField).toHaveAttribute("placeholder", "Password");
+  await expect(loginPage.passwordInput).toHaveAttribute(
+    "placeholder",
+    "Password"
+  );
 });
 
 test("login button is visible", async ({ page, loginPage }) => {
-  loginPage;
-  const loginButton = page.locator('[data-test="login-button"]');
-
-  await expect(loginButton).toBeVisible();
+  await expect(loginPage.loginButton).toBeVisible();
 });
 
 test("successful login with valid credentials", async ({
@@ -46,9 +32,8 @@ test("successful login with valid credentials", async ({
   validUser,
   loginPage,
 }) => {
-  loginPage;
   await loginPage.login(validUser);
-  await expect(page).toHaveURL(inventoryUrl);
+  await expect(page).toHaveURL(routes.inventory);
 });
 
 test("login fails with empty username", async ({
@@ -56,13 +41,10 @@ test("login fails with empty username", async ({
   emptyUsername,
   loginPage,
 }) => {
-  loginPage;
   await loginPage.login(emptyUsername);
-  const errorMessage = page.locator('[data-test="error"]');
-
-  await expect(page).toHaveURL(loginUrl);
-  await expect(errorMessage).toBeVisible();
-  await expect(errorMessage).toContainText(/username is required/i);
+  await expect(page).toHaveURL(routes.login);
+  await expect(loginPage.errorMessage).toBeVisible();
+  await expect(loginPage.errorMessage).toContainText(/username is required/i);
 });
 
 test("login fails with empty password", async ({
@@ -70,13 +52,10 @@ test("login fails with empty password", async ({
   emptyPassword,
   loginPage,
 }) => {
-  loginPage;
   await loginPage.login(emptyPassword);
-  const errorMessage = page.locator('[data-test="error"]');
-
-  await expect(page).toHaveURL(loginUrl);
-  await expect(errorMessage).toBeVisible();
-  await expect(errorMessage).toContainText(/password is required/i);
+  await expect(page).toHaveURL(routes.login);
+  await expect(loginPage.errorMessage).toBeVisible();
+  await expect(loginPage.errorMessage).toContainText(/password is required/i);
 });
 
 test("login fails with wrong username", async ({
@@ -84,13 +63,10 @@ test("login fails with wrong username", async ({
   wrongUsername,
   loginPage,
 }) => {
-  loginPage;
   await loginPage.login(wrongUsername);
-  const errorMessage = page.locator('[data-test="error"]');
-
-  await expect(page).toHaveURL(loginUrl);
-  await expect(errorMessage).toBeVisible();
-  await expect(errorMessage).toContainText(
+  await expect(page).toHaveURL(routes.login);
+  await expect(loginPage.errorMessage).toBeVisible();
+  await expect(loginPage.errorMessage).toContainText(
     /username and password do not match any user/i
   );
 });
@@ -100,13 +76,10 @@ test("login fails with wrong password", async ({
   wrongPassword,
   loginPage,
 }) => {
-  loginPage;
   await loginPage.login(wrongPassword);
-  const errorMessage = page.locator('[data-test="error"]');
-
-  await expect(page).toHaveURL(loginUrl);
-  await expect(errorMessage).toBeVisible();
-  await expect(errorMessage).toContainText(
+  await expect(page).toHaveURL(routes.login);
+  await expect(loginPage.errorMessage).toBeVisible();
+  await expect(loginPage.errorMessage).toContainText(
     /username and password do not match any user/i
   );
 });
@@ -116,60 +89,34 @@ test("login fails with locked out user", async ({
   lockedOutUser,
   loginPage,
 }) => {
-  loginPage;
   await loginPage.login(lockedOutUser);
-  const errorMessage = page.locator('[data-test="error"]');
-
-  await expect(page).toHaveURL(loginUrl);
-  await expect(errorMessage).toBeVisible();
-  await expect(errorMessage).toContainText(/locked out/i);
+  await expect(page).toHaveURL(routes.login);
+  await expect(loginPage.errorMessage).toBeVisible();
+  await expect(loginPage.errorMessage).toContainText(/locked out/i);
 });
 
 test("cannot access inventory page without login", async ({ page }) => {
-  await page.goto(inventoryUrl);
-  await expect(page).toHaveURL(loginUrl);
+  await page.goto(routes.inventory);
+  await expect(page).toHaveURL(routes.login);
 });
 
 test("cannot access cart page without login", async ({ page }) => {
-  await page.goto(cartUrl);
-  await expect(page).toHaveURL(loginUrl);
+  await page.goto(routes.cart);
+  await expect(page).toHaveURL(routes.login);
 });
 
-test("logout succeeds after successful login", async ({
-  page,
-  validUser,
-  loginPage,
-}) => {
-  loginPage;
-  await loginPage.login(validUser);
-  await expect(page).toHaveURL(inventoryUrl);
-  await page.locator("#react-burger-menu-btn").click();
-  await page.locator('[data-test="logout-sidebar-link"]').click();
-  await expect(page).toHaveURL(loginUrl);
+test("session is preserved after navigation", async ({ loggedInPage }) => {
+  await loggedInPage.goto(routes.inventory);
+  await expect(loggedInPage).toHaveURL(routes.inventory);
+  await loggedInPage.goto(routes.cart);
+  await expect(loggedInPage).toHaveURL(routes.cart);
+  await loggedInPage.goto(routes.inventory);
+  await expect(loggedInPage).toHaveURL(routes.inventory);
 });
 
-test("session is preserved after navigation", async ({
-  page,
-  validUser,
-  loginPage,
-}) => {
-  loginPage;
-  await loginPage.login(validUser);
-  await expect(page).toHaveURL(inventoryUrl);
-  await page.goto(cartUrl);
-  await expect(page).toHaveURL(cartUrl);
-  await page.goto(inventoryUrl);
-  await expect(page).toHaveURL(inventoryUrl);
-});
-
-test("session is preserved after page reload", async ({
-  page,
-  validUser,
-  loginPage,
-}) => {
-  loginPage;
-  await loginPage.login(validUser);
-  await expect(page).toHaveURL(inventoryUrl);
-  await page.reload();
-  await expect(page).toHaveURL(inventoryUrl);
+test("session is preserved after page reload", async ({ loggedInPage }) => {
+  await loggedInPage.goto(routes.inventory);
+  await expect(loggedInPage).toHaveURL(routes.inventory);
+  await loggedInPage.reload();
+  await expect(loggedInPage).toHaveURL(routes.inventory);
 });

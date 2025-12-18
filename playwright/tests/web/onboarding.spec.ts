@@ -1,31 +1,23 @@
 import { test, expect } from "../../fixtures/auth.fixture.js";
-import { loginUrl, inventoryUrl } from "../../constants/url.constants";
+import { routes } from "../../constants/routes.js";
 
 test("post-login landing shows main inventory page content", async ({
-  page,
-  trueUser,
-  loginPage,
+  inventoryPage,
 }) => {
-  await loginPage.login(trueUser);
-  await expect(page).toHaveURL(inventoryUrl);
-  await expect(page.locator('[data-test="inventory-list"]')).toBeVisible();
-  await expect(page.locator("#react-burger-menu-btn")).toBeVisible();
-  await expect(page.locator('[data-test="title"]')).toBeVisible();
-  await expect(page.locator('[data-test="shopping-cart-link"]')).toBeVisible();
-  await expect(
-    page.locator('[data-test="product-sort-container"]')
-  ).toBeVisible();
+  await inventoryPage.goto();
+  await expect(inventoryPage.inventoryList).toBeVisible();
+  await expect(inventoryPage.burgerMenuButton).toBeVisible();
+  await expect(inventoryPage.title).toBeVisible();
+  await expect(inventoryPage.cartLink).toBeVisible();
+  await expect(inventoryPage.sortContainer).toBeVisible();
 });
 
 test("post-login landing shows at least one product card with product title and price", async ({
-  page,
-  trueUser,
-  loginPage,
+  inventoryPage,
 }) => {
-  await loginPage.login(trueUser);
-  await expect(page).toHaveURL(inventoryUrl);
+  await inventoryPage.goto();
 
-  const firstProduct = page.locator('[data-test="inventory-item"]').first();
+  const firstProduct = inventoryPage.inventoryItem.first();
   const firstProductPrice = firstProduct.locator(
     '[data-test="inventory-item-price"]'
   );
@@ -46,69 +38,48 @@ test("post-login landing shows at least one product card with product title and 
 });
 
 test("product details page opens when clicking a product title from inventory", async ({
-  page,
-  trueUser,
-  loginPage,
+  inventoryPage,
 }) => {
-  await loginPage.login(trueUser);
-  await expect(page).toHaveURL(inventoryUrl);
+  await inventoryPage.goto();
 
-  const firstProduct = page.locator('[data-test="inventory-item"]').first();
+  const firstProduct = inventoryPage.inventoryItem.first();
   const firstProductNameLocator = firstProduct.locator(
     '[data-test="inventory-item-name"]'
   );
   const firstProductName = await firstProductNameLocator.textContent();
 
   await firstProductNameLocator.click();
-  await expect(page).toHaveURL(
-    /https:\/\/www\.saucedemo\.com\/inventory-item\.html\?id=\d+/
+  await expect(inventoryPage.page).toHaveURL(
+    new RegExp(`${routes.inventoryItem}\\?id=\\d+$`)
   );
 
-  const productTitle = page.locator('[data-test="inventory-item-name"]');
-  const productTitleText = await productTitle.textContent();
-  const backToProductsButton = page.locator('[data-test="back-to-products"]');
+  const productTitleText = await inventoryPage.productTitle.textContent();
+  const backToProductsButton = inventoryPage.backToProductsButton;
 
-  await expect(productTitle).toBeVisible();
+  await expect(inventoryPage.productTitle).toBeVisible();
   await expect(backToProductsButton).toBeVisible();
   expect(productTitleText).toBe(firstProductName);
   await backToProductsButton.click();
-  await expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
+  await expect(inventoryPage.page).toHaveURL(routes.inventory);
 });
 
-test("shopping cart is initially empty upon first login", async ({
-  page,
-  trueUser,
-  loginPage,
-}) => {
-  await loginPage.login(trueUser);
-  await expect(page).toHaveURL(inventoryUrl);
-
-  const cartBadge = page.locator('[data-test="shopping-cart-badge"]');
-
-  await expect(cartBadge).toHaveCount(0);
+test("cart is empty for authenticated user", async ({ inventoryPage }) => {
+  await inventoryPage.goto();
+  await expect(inventoryPage.shoppingCartBadge).toHaveCount(0);
 });
 
-test("logout via side menu works correctly", async ({
-  page,
-  trueUser,
-  loginPage,
-}) => {
-  await loginPage.login(trueUser);
-  await expect(page).toHaveURL(inventoryUrl);
-  await page.locator("#react-burger-menu-btn").click();
-  await page.locator('[data-test="logout-sidebar-link"]').click();
-  await expect(page).toHaveURL(loginUrl);
+test("logout via side menu works correctly", async ({ inventoryPage }) => {
+  await inventoryPage.goto();
+  await inventoryPage.logout();
+  await expect(inventoryPage.page).toHaveURL(routes.login);
 });
 
 test("add to cart works correctly from inventory page", async ({
-  page,
-  trueUser,
-  loginPage,
+  inventoryPage,
 }) => {
-  await loginPage.login(trueUser);
-  await expect(page).toHaveURL(inventoryUrl);
+  await inventoryPage.goto();
 
-  const firstProduct = page.locator('[data-test="inventory-item"]').first();
+  const firstProduct = inventoryPage.inventoryItem.first();
   const firstProductNameLocator = firstProduct.locator(
     '[data-test="inventory-item-name"]'
   );
@@ -118,14 +89,11 @@ test("add to cart works correctly from inventory page", async ({
   );
 
   await addToCartButton.click();
+  await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
+  await inventoryPage.shoppingCartLink.click();
+  await expect(inventoryPage.page).toHaveURL(routes.cart);
 
-  const cartBadge = page.locator('[data-test="shopping-cart-badge"]');
-
-  await expect(cartBadge).toHaveText("1");
-  await page.locator('[data-test="shopping-cart-link"]').click();
-  await expect(page).toHaveURL("https://www.saucedemo.com/cart.html");
-
-  const cartItem = page.locator('[data-test="inventory-item"]').first();
+  const cartItem = inventoryPage.inventoryItem.first();
   const cartItemNameLocator = cartItem.locator(
     '[data-test="inventory-item-name"]'
   );
