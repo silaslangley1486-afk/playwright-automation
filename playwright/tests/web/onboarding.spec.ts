@@ -4,7 +4,8 @@ import { InventoryPage } from "../../models/inventory-page";
 import { currencyRegex } from "../../constants/currrency.js";
 
 test.describe("@smoke onboarding", () => {
-  test.describe.configure({ mode: "serial" });
+  test.describe.configure({ mode: "serial", retries: 0, timeout: 15_000 });
+  test.use({ trace: "retain-on-failure" });
 
   test("@smoke inventory is usable", async ({ inventoryPage }) => {
     await inventoryPage.goto();
@@ -55,7 +56,8 @@ test.describe("@smoke onboarding", () => {
 });
 
 test.describe("@regression onboarding / post-login", () => {
-  test.describe.configure({ mode: "parallel" });
+  test.describe.configure({ mode: "parallel", retries: 1, timeout: 30_000 });
+  test.use({ trace: "on-first-retry" });
 
   test("post-login landing shows main inventory page content", async ({
     inventoryPage,
