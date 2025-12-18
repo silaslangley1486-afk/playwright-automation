@@ -13,6 +13,8 @@ test.describe("@smoke login", () => {
 });
 
 test.describe("@regression login", () => {
+  test.describe.configure({ mode: "parallel" });
+
   test("username field is visible", async ({ page, loginPage }) => {
     await expect(loginPage.usernameInput).toBeVisible();
   });
