@@ -63,11 +63,11 @@ test.describe("@regression onboarding / post-login", () => {
     inventoryPage,
   }) => {
     await inventoryPage.goto();
-    await expect(inventoryPage.inventoryList).toBeVisible();
-    await expect(inventoryPage.burgerMenuButton).toBeVisible();
-    await expect(inventoryPage.title).toBeVisible();
-    await expect(inventoryPage.cartLink).toBeVisible();
-    await expect(inventoryPage.sortContainer).toBeVisible();
+    await expect.soft(inventoryPage.inventoryList).toBeVisible();
+    await expect.soft(inventoryPage.burgerMenuButton).toBeVisible();
+    await expect.soft(inventoryPage.title).toBeVisible();
+    await expect.soft(inventoryPage.cartLink).toBeVisible();
+    await expect.soft(inventoryPage.sortContainer).toBeVisible();
   });
 
   test("post-login landing shows at least one product card with product title and price", async ({
