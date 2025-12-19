@@ -94,6 +94,12 @@ export class InventoryPage {
     await addToCartButton.click();
   }
 
+  async getShoppingCartBadgeCount(): Promise<number> {
+    const badge = await this.shoppingCartBadge.textContent();
+
+    return badge ? parseInt(badge) : 0;
+  }
+
   async getFirstCartItemName(): Promise<string> {
     const cartItem = this.inventoryItem.first();
     const cartItemNameLocator = cartItem.locator(

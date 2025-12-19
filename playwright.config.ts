@@ -31,6 +31,8 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     baseURL: "https://www.saucedemo.com",
     trace: "on-first-retry",
+    headless: true,
+    screenshot: "only-on-failure",
   },
 
   /* Configure projects for major browsers */
@@ -44,10 +46,60 @@ export default defineConfig({
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },
     },
-
     {
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
+    },
+    // ───── SMOKE PROJECTS ─────
+    {
+      name: "chromium-smoke",
+      grep: /@smoke/,
+      use: {
+        ...devices["Desktop Chrome"],
+        trace: "retain-on-failure",
+      },
+    },
+    {
+      name: "firefox-smoke",
+      grep: /@smoke/,
+      use: {
+        ...devices["Desktop Firefox"],
+        trace: "retain-on-failure",
+      },
+    },
+    {
+      name: "webkit-smoke",
+      grep: /@smoke/,
+      use: {
+        ...devices["Desktop Safari"],
+        trace: "retain-on-failure",
+      },
+    },
+
+    // ───── REGRESSION PROJECTS ─────
+    {
+      name: "chromium-regression",
+      grep: /@regression/,
+      use: {
+        ...devices["Desktop Chrome"],
+        trace: "on-first-retry",
+      },
+    },
+    {
+      name: "firefox-regression",
+      grep: /@regression/,
+      use: {
+        ...devices["Desktop Firefox"],
+        trace: "on-first-retry",
+      },
+    },
+    {
+      name: "webkit-regression",
+      grep: /@regression/,
+      use: {
+        ...devices["Desktop Safari"],
+        trace: "on-first-retry",
+      },
     },
 
     /* Test against mobile viewports. */

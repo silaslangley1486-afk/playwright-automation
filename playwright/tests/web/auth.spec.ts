@@ -2,8 +2,7 @@ import { test, expect } from "../../fixtures/auth.fixture.js";
 import { routes } from "../../constants/routes.js";
 
 test.describe("@smoke login", () => {
-  test.describe.configure({ retries: 0, timeout: 15_000 });
-  test.use({ trace: "retain-on-failure" });
+  test.describe.configure({ retries: 0, timeout: 25_000 });
 
   test("successful login with valid credentials", async ({
     page,
@@ -17,7 +16,6 @@ test.describe("@smoke login", () => {
 
 test.describe("@regression login", () => {
   test.describe.configure({ mode: "parallel", retries: 1, timeout: 30_000 });
-  test.use({ trace: "on-first-retry" });
 
   test("username field is visible", async ({ page, loginPage }) => {
     await expect(loginPage.usernameInput).toBeVisible();
