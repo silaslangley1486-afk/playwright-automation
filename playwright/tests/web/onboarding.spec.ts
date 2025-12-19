@@ -29,8 +29,6 @@ test.describe("@smoke onboarding", () => {
     await inventoryPage.addToCart();
 
     await expect.poll(() => inventoryPage.getShoppingCartBadgeCount()).toBe(1);
-
-    //await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
     await inventoryPage.shoppingCartLink.click();
     await expect(inventoryPage.page).toHaveURL(routes.cart);
     expect(await inventoryPage.hasRemoveButton()).toBe(true);
@@ -51,7 +49,7 @@ test.describe("@smoke onboarding", () => {
 
     await expect(inventoryPage.inventoryList).toBeVisible();
     await inventoryPage.addToCart();
-    await expect(inventoryPage.shoppingCartBadge).toHaveText("1");
+    await expect.poll(() => inventoryPage.getShoppingCartBadgeCount()).toBe(1);
     await inventoryPage.logout();
     await expect(inventoryPage.page).toHaveURL(routes.login);
   });
