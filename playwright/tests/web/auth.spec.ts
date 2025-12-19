@@ -17,29 +17,29 @@ test.describe("@smoke login", () => {
 test.describe("@regression login", () => {
   test.describe.configure({ mode: "parallel", retries: 1, timeout: 30_000 });
 
-  test("username field is visible", async ({ page, loginPage }) => {
+  test("username field is visible", async ({ loginPage }) => {
     await expect(loginPage.usernameInput).toBeVisible();
   });
 
-  test("password field is visible", async ({ page, loginPage }) => {
+  test("password field is visible", async ({ loginPage }) => {
     await expect(loginPage.passwordInput).toBeVisible();
   });
 
-  test("username placeholder is correct", async ({ page, loginPage }) => {
+  test("username placeholder is correct", async ({ loginPage }) => {
     await expect(loginPage.usernameInput).toHaveAttribute(
       "placeholder",
       "Username"
     );
   });
 
-  test("password placeholder is correct", async ({ page, loginPage }) => {
+  test("password placeholder is correct", async ({ loginPage }) => {
     await expect(loginPage.passwordInput).toHaveAttribute(
       "placeholder",
       "Password"
     );
   });
 
-  test("login button is visible", async ({ page, loginPage }) => {
+  test("login button is visible", async ({ loginPage }) => {
     await expect(loginPage.loginButton).toBeVisible();
   });
 
