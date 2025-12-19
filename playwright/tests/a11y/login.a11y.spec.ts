@@ -13,11 +13,6 @@ test("@a11y @smoke login page has no serious violations", async ({ page }) => {
       violation.impact === "serious" || violation.impact === "critical"
   );
 
-  console.log(
-    "All axe violations on login page:\n",
-    JSON.stringify(violations, null, 2)
-  );
-
   if (serious.length) {
     console.log(JSON.stringify(serious, null, 2));
   }
