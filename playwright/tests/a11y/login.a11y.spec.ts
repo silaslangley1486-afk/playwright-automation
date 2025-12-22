@@ -57,7 +57,7 @@ test.describe("@a11y @regression login", () => {
     // depending on our design guidelines.
   });
 
-  test("keyboard-only login works", async ({ loginPage, page }) => {
+  test("keyboard-only login works", async ({ page }) => {
     await page.keyboard.press("Tab");
     await page.keyboard.type(validUserName);
     await page.keyboard.press("Tab");
@@ -65,10 +65,10 @@ test.describe("@a11y @regression login", () => {
     await page.keyboard.press("Tab");
     await expect(page.getByRole("button", { name: "Login" })).toBeFocused();
     await page.keyboard.press("Enter");
-    await page.getByText("Products").waitFor();
+    await expect(page.getByText("Products")).toBeVisible();
   });
 
-  test("login button has visible focus", async ({ loginPage, page }) => {
+  test("login button has visible focus", async ({ page }) => {
     await page.getByRole("button", { name: "Login" }).focus();
 
     const active = await getActiveElementFocusStyles(page);

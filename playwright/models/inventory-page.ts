@@ -15,6 +15,8 @@ export class InventoryPage {
   readonly shoppingCartLink: Locator;
   readonly logoutSidebarLink: Locator;
   readonly removeItemButton: Locator;
+  readonly firstAddToCartButtonByRole: Locator;
+  readonly logoutLinkByRole: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -32,6 +34,15 @@ export class InventoryPage {
     this.removeItemButton = page.locator(
       '[data-test="remove-sauce-labs-backpack"]'
     );
+
+    this.firstAddToCartButtonByRole = page
+      .locator(".inventory_item")
+      .getByRole("button", { name: /add/i })
+      .first();
+
+    this.logoutLinkByRole = page
+      .locator(".bm-item-list")
+      .getByRole("link", { name: "Logout" });
   }
 
   async goto() {
@@ -88,10 +99,15 @@ export class InventoryPage {
   }
 
   async addToCart() {
-    const firstProduct = await this.inventoryItem.first();
-    const addToCartButton = firstProduct.locator('[data-test^="add-to-cart-"]');
+    const addToCartButton = await this.getFirstAddToCartButton();
 
     await addToCartButton.click();
+  }
+
+  async getFirstAddToCartButton() {
+    const firstProduct = this.inventoryItem.first();
+
+    return firstProduct.locator('[data-test^="add-to-cart-"]');
   }
 
   async getShoppingCartBadgeCount(): Promise<number> {

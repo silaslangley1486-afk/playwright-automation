@@ -31,7 +31,11 @@ export class LoginPage {
   async login(user: User): Promise<void> {
     await this.usernameInput.fill(user.username);
     await this.passwordInput.fill(user.password);
-    await this.loginButton.click();
+
+    await Promise.all([
+      this.page.waitForURL(/inventory\.html/),
+      this.loginButton.click(),
+    ]);
   }
 
   async triggerErrorState() {
