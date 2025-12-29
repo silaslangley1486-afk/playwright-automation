@@ -42,7 +42,7 @@ test.describe("@smoke onboarding", () => {
     validUser,
     loginPage,
   }) => {
-    await loginPage.login(validUser);
+    await loginPage.loginExpectSuccess(validUser);
     await expect(loginPage.page).toHaveURL(routes.inventory);
 
     const inventoryPage = new InventoryPage(loginPage.page);

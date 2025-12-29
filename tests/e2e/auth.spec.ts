@@ -9,7 +9,7 @@ test.describe("@smoke login", () => {
     validUser,
     loginPage,
   }) => {
-    await loginPage.login(validUser);
+    await loginPage.loginExpectSuccess(validUser);
     await expect(page).toHaveURL(routes.inventory);
   });
 });
@@ -48,7 +48,7 @@ test.describe("@regression login", () => {
     emptyUsername,
     loginPage,
   }) => {
-    await loginPage.login(emptyUsername);
+    await loginPage.submit(emptyUsername);
     await expect(page).toHaveURL(routes.login);
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toContainText(/username is required/i);
@@ -59,7 +59,7 @@ test.describe("@regression login", () => {
     emptyPassword,
     loginPage,
   }) => {
-    await loginPage.login(emptyPassword);
+    await loginPage.submit(emptyPassword);
     await expect(page).toHaveURL(routes.login);
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toContainText(/password is required/i);
@@ -70,7 +70,7 @@ test.describe("@regression login", () => {
     wrongUsername,
     loginPage,
   }) => {
-    await loginPage.login(wrongUsername);
+    await loginPage.submit(wrongUsername);
     await expect(page).toHaveURL(routes.login);
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toContainText(
@@ -83,7 +83,7 @@ test.describe("@regression login", () => {
     wrongPassword,
     loginPage,
   }) => {
-    await loginPage.login(wrongPassword);
+    await loginPage.submit(wrongPassword);
     await expect(page).toHaveURL(routes.login);
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toContainText(
@@ -96,7 +96,7 @@ test.describe("@regression login", () => {
     lockedOutUser,
     loginPage,
   }) => {
-    await loginPage.login(lockedOutUser);
+    await loginPage.submit(lockedOutUser);
     await expect(page).toHaveURL(routes.login);
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toContainText(/locked out/i);

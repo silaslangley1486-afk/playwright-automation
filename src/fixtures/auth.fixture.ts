@@ -79,7 +79,7 @@ export const test = base.extend<AuthFixtures>({
 
     const loginPage = new LoginPage(page);
     await loginPage.navigateToLoginPage();
-    await loginPage.login({
+    await loginPage.loginExpectSuccess({
       username: validUserName,
       password: validPassword,
     });
