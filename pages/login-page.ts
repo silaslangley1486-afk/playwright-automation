@@ -15,8 +15,20 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.usernameInput = page.locator('[data-test="username"]');
-    this.passwordInput = page.locator('[data-test="password"]');
+    this.usernameInput = page
+      .getByLabel("Username")
+      .or(page.getByPlaceholder("Username"))
+      .or(page.locator('[data-test="username"]'));
+
+    this.passwordInput = page
+      .getByLabel("Password")
+      .or(page.getByPlaceholder("Password"))
+      .or(page.locator('[data-test="password"]'));
+
+    this.loginButton = page
+      .getByRole("button", { name: "Login" })
+      .or(page.locator('[data-test="login-button"]'));
+
     this.loginButton = page.locator('[data-test="login-button"]');
     this.errorMessage = page.locator('[data-test="error"]');
     this.errorDismissButton = page.locator('[data-test="error-button"]');
@@ -44,5 +56,21 @@ export class LoginPage {
     await this.passwordInput.fill(wrongPassword);
     await this.loginButton.click();
     await this.errorMessage.waitFor();
+  }
+
+  async tab() {
+    await this.page.keyboard.press("Tab");
+  }
+
+  async typeUsername(value: string) {
+    await this.usernameInput.pressSequentially(value);
+  }
+
+  async typePassword(value: string) {
+    await this.passwordInput.pressSequentially(value);
+  }
+
+  async pressEnterWithKeyboard() {
+    await this.page.keyboard.press("Enter");
   }
 }

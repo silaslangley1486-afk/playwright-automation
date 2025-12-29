@@ -3,12 +3,12 @@ import { routes } from "../src/utils/routes";
 
 export class InventoryPage {
   readonly page: Page;
+  readonly title: Locator;
   readonly inventoryList: Locator;
   readonly inventoryItem: Locator;
   readonly productTitle: Locator;
   readonly backToProductsButton: Locator;
   readonly burgerMenuButton: Locator;
-  readonly title: Locator;
   readonly cartLink: Locator;
   readonly sortContainer: Locator;
   readonly shoppingCartBadge: Locator;
@@ -20,12 +20,15 @@ export class InventoryPage {
 
   constructor(page: Page) {
     this.page = page;
+    this.title = this.page
+      .getByText("Products")
+      .or(page.locator('[data-test="title"]'));
+
     this.inventoryList = page.locator('[data-test="inventory-list"]');
     this.inventoryItem = page.locator('[data-test="inventory-item"]');
     this.productTitle = page.locator('[data-test="inventory-item-name"]');
     this.backToProductsButton = page.locator('[data-test="back-to-products"]');
     this.burgerMenuButton = page.locator("#react-burger-menu-btn");
-    this.title = page.locator('[data-test="title"]');
     this.cartLink = page.locator('[data-test="shopping-cart-link"]');
     this.sortContainer = page.locator('[data-test="product-sort-container"]');
     this.shoppingCartBadge = page.locator('[data-test="shopping-cart-badge"]');
