@@ -58,3 +58,5 @@ Auto-generated tests (/auto-generated)
 ## Notes
 
 This repository is intended as a portfolio example illustrating how accessibility-aware automation can be integrated into modern QA workflows. It is not intended to represent full application coverage or production test volume. Some areas are intentionally left minimal to keep the focus on test design rather than complete coverage.
+
+Some accessibility tests will fail since the saucedemo site has some a11y violations. Comments are added to those tests to clarify that they are expected to fail.
