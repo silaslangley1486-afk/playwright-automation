@@ -1,5 +1,5 @@
 import { Page, Locator } from "@playwright/test";
-import { routes } from "../constants/routes";
+import { routes } from "../src/utils/routes";
 
 export class InventoryPage {
   readonly page: Page;

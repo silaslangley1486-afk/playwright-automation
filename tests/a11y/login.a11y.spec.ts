@@ -1,6 +1,6 @@
-import { test, expect } from "../../fixtures/auth.fixture.js";
+import { test, expect } from "../../src/fixtures/auth.fixture.js";
 import { expectNoSeriousA11yViolations } from "./asssertions";
-import { validUserName, validPassword } from "../../test-data/users";
+import { validUserName, validPassword } from "../../src/test-data/users";
 import {
   getActiveElementInfo,
   getActiveElementFocusStyles,

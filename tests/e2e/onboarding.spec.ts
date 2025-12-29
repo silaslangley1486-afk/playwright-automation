@@ -1,7 +1,7 @@
-import { test, expect } from "../../fixtures/auth.fixture.js";
-import { routes } from "../../constants/routes.js";
-import { InventoryPage } from "../../models/inventory-page";
-import { currencyRegex } from "../../constants/currrency.js";
+import { test, expect } from "../../src/fixtures/auth.fixture.js";
+import { routes } from "../../src/utils/routes.js";
+import { InventoryPage } from "../../pages/inventory-page";
+import { currencyRegex } from "../../src/utils/regex.js";
 
 test.describe("@smoke onboarding", () => {
   test.describe.configure({ mode: "serial", retries: 0, timeout: 25_000 });

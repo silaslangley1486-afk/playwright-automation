@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
-import { LoginPage } from "../models/login-page";
-import { validUserName, validPassword } from "../test-data/users";
+import { LoginPage } from "../pages/login-page";
+import { validUserName, validPassword } from "../src/test-data/users";
 
 test("generate authenticated state", async ({ page }) => {
   const loginPage = new LoginPage(page);

@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
-import { routes } from "../constants/routes";
-import type { User } from "../types/auth.types";
-import { wrongPassword, lockedOutUserName } from "../test-data/users";
+import { routes } from "../src/utils/routes";
+import type { User } from "../src/types/auth.types";
+import { wrongPassword, lockedOutUserName } from "../src/test-data/users";
 
 export class LoginPage {
   readonly page: Page;

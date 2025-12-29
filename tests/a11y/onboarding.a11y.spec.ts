@@ -1,6 +1,6 @@
-import { test, expect } from "../../fixtures/auth.fixture.js";
+import { test, expect } from "../../src/fixtures/auth.fixture.js";
 import { expectNoSeriousA11yViolations } from "./asssertions.js";
-import { routes } from "../../constants/routes.js";
+import { routes } from "../../src/utils/routes.js";
 import { getActiveElementFocusStyles } from "./focusUtils";
 
 test("@a11y @smoke @regression onboarding after login", async ({

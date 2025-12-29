@@ -1,6 +1,6 @@
 import { test as base, expect, Page, BrowserContext } from "@playwright/test";
-import { LoginPage } from "../models/login-page";
-import { InventoryPage } from "../models/inventory-page";
+import { LoginPage } from "../../pages/login-page";
+import { InventoryPage } from "../../pages/inventory-page";
 import {
   validUserName,
   validPassword,

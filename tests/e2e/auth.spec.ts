@@ -1,5 +1,5 @@
-import { test, expect } from "../../fixtures/auth.fixture.js";
-import { routes } from "../../constants/routes.js";
+import { test, expect } from "../../src/fixtures/auth.fixture.js";
+import { routes } from "../../src/utils/routes.js";
 
 test.describe("@smoke login", () => {
   test.describe.configure({ retries: 0, timeout: 25_000 });
