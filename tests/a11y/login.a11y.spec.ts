@@ -58,16 +58,16 @@ test.describe("@a11y @regression login", () => {
   });
 
   test("keyboard-only login works", async ({ loginPage, inventoryPage }) => {
-    await loginPage.tab();
+    await loginPage.keyboardNavigator.tab();
     await loginPage.typeUsername(validUserName);
 
-    await loginPage.tab();
+    await loginPage.keyboardNavigator.tab();
     await loginPage.typePassword(validPassword);
 
-    await loginPage.tab();
+    await loginPage.keyboardNavigator.tab();
     await expect(loginPage.loginButton).toBeFocused();
 
-    await loginPage.pressEnterWithKeyboard();
+    await loginPage.keyboardNavigator.enter();
     await expect(inventoryPage.title).toBeVisible();
   });
 

@@ -1,8 +1,10 @@
 import { Page, Locator } from "@playwright/test";
 import { routes } from "../src/utils/routes";
+import { KeyboardNavigator } from "../src/utils/keyboard-navigator";
 
 export class InventoryPage {
   readonly page: Page;
+  readonly keyboardNavigator: KeyboardNavigator;
   readonly title: Locator;
   readonly inventoryList: Locator;
   readonly inventoryItem: Locator;
@@ -20,6 +22,7 @@ export class InventoryPage {
 
   constructor(page: Page) {
     this.page = page;
+    this.keyboardNavigator = new KeyboardNavigator(page);
     this.title = this.page
       .getByText("Products")
       .or(page.locator('[data-test="title"]'));

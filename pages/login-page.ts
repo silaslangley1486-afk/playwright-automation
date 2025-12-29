@@ -2,9 +2,11 @@ import { Page, Locator } from "@playwright/test";
 import { routes } from "../src/utils/routes";
 import type { User } from "../src/types/auth.types";
 import { wrongPassword, lockedOutUserName } from "../src/test-data/users";
+import { KeyboardNavigator } from "../src/utils/keyboard-navigator";
 
 export class LoginPage {
   readonly page: Page;
+  readonly keyboardNavigator: KeyboardNavigator;
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
@@ -15,6 +17,7 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
+    this.keyboardNavigator = new KeyboardNavigator(page);
     this.usernameInput = page
       .getByLabel("Username")
       .or(page.getByPlaceholder("Username"))
@@ -58,19 +61,11 @@ export class LoginPage {
     await this.errorMessage.waitFor();
   }
 
-  async tab() {
-    await this.page.keyboard.press("Tab");
-  }
-
   async typeUsername(value: string) {
     await this.usernameInput.pressSequentially(value);
   }
 
   async typePassword(value: string) {
     await this.passwordInput.pressSequentially(value);
-  }
-
-  async pressEnterWithKeyboard() {
-    await this.page.keyboard.press("Enter");
   }
 }
