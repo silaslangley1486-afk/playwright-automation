@@ -1,3 +1,5 @@
+// Tests covering the post-login onboarding flow (first-time authenticated experience)
+
 import { test, expect } from "../../src/fixtures/auth.fixture.js";
 import { routes } from "../../src/utils/routes.js";
 import { InventoryPage } from "../../pages/inventory-page";
