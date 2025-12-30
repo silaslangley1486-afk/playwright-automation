@@ -25,6 +25,54 @@ To keep the focus on test design and quality, the test coverage is intentionally
 
 - Post-login onboarding behavior on the inventory page
 
+## How To Run
+
+This repo targets the public SauceDemo site and requires no local app setup.
+
+### Prerequisites:
+
+- Node.js (v18+ recommended)
+
+### Install Dependencies:
+
+```bash
+npm install
+```
+
+### If this is your first time running Playwright:
+
+```bash
+npx playwright install
+```
+
+### Run Tests:
+
+```bash
+npm run test:smoke
+npm run test:regression
+npm run test:a11y
+```
+
+### Show report:
+
+```bash
+npx playwright show-report
+```
+
+### Optional: run tests interactively
+
+Run tests in headed mode (browser visible):
+
+```bash
+npm run test:headed
+```
+
+Launch Playwright UI mode:
+
+```bash
+npm run test:ui
+```
+
 ## Test Structure
 
 Page models
