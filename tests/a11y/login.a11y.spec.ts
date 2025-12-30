@@ -1,6 +1,6 @@
 import { test, expect } from "../../src/fixtures/auth.fixture.js";
 import { expectKnownA11yFailure } from "../../src/utils/a11y/known-failures";
-import { expectNoAutomatedWCAGViolations } from "../../src/utils/a11y/assertions.js";
+import { expectNoSeriousOrCriticalAxeViolations } from "../../src/utils/a11y/assertions.js";
 import { validUserName, validPassword } from "../../src/test-data/users";
 import {
   getActiveElementInfo,
@@ -13,7 +13,7 @@ test.describe("@a11y @smoke login", () => {
       "SauceDemo login page contains known accessibility violations"
     );
 
-    await expectNoAutomatedWCAGViolations(page);
+    await expectNoSeriousOrCriticalAxeViolations(page);
   });
 });
 
@@ -24,7 +24,7 @@ test.describe("@a11y @regression login", () => {
     );
 
     await loginPage.triggerErrorState();
-    await expectNoAutomatedWCAGViolations(page, {
+    await expectNoSeriousOrCriticalAxeViolations(page, {
       scope: "#login_button_container",
     });
   });

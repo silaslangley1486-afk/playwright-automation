@@ -1,6 +1,6 @@
 import { test, expect } from "../../src/fixtures/auth.fixture.js";
 import { expectKnownA11yFailure } from "../../src/utils/a11y/known-failures";
-import { expectNoAutomatedWCAGViolations } from "../../src/utils/a11y/assertions.js";
+import { expectNoSeriousOrCriticalAxeViolations } from "../../src/utils/a11y/assertions.js";
 import { routes } from "../../src/utils/routes.js";
 import { getActiveElementFocusStyles } from "../../src/utils/a11y/focus-utils.js";
 
@@ -13,14 +13,14 @@ test("@a11y @smoke @regression onboarding after login", async ({
 
   await inventoryPage.goto();
   await inventoryPage.page.getByText("Products").waitFor();
-  await expectNoAutomatedWCAGViolations(inventoryPage.page);
+  await expectNoSeriousOrCriticalAxeViolations(inventoryPage.page);
 });
 
 test.describe("@a11y @regression onboarding after login", () => {
   test("inventory with menu open is accessible", async ({ inventoryPage }) => {
     await inventoryPage.goto();
     await inventoryPage.burgerMenuButton.click();
-    await expectNoAutomatedWCAGViolations(inventoryPage.page, {
+    await expectNoSeriousOrCriticalAxeViolations(inventoryPage.page, {
       scope: ".bm-menu-wrap",
     });
   });
@@ -30,7 +30,7 @@ test.describe("@a11y @regression onboarding after login", () => {
   }) => {
     await inventoryPage.goto();
     await inventoryPage.addToCart();
-    await expectNoAutomatedWCAGViolations(inventoryPage.page, {
+    await expectNoSeriousOrCriticalAxeViolations(inventoryPage.page, {
       scope: "#inventory_container",
     });
   });

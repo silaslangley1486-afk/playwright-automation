@@ -5,7 +5,7 @@ type A11yOptions = {
   scope?: string | string[];
 };
 
-export async function expectNoAutomatedWCAGViolations(
+export async function expectNoSeriousOrCriticalAxeViolations(
   page: Page,
   options?: A11yOptions
 ): Promise<void> {
