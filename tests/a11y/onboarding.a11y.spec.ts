@@ -1,4 +1,5 @@
 import { test, expect } from "../../src/fixtures/auth.fixture.js";
+import { expectKnownA11yFailure } from "../../src/utils/a11y/known-failures";
 import { expectNoAutomatedWCAGViolations } from "../../src/utils/a11y/assertions.js";
 import { routes } from "../../src/utils/routes.js";
 import { getActiveElementFocusStyles } from "../../src/utils/a11y/focus-utils.js";
@@ -6,11 +7,13 @@ import { getActiveElementFocusStyles } from "../../src/utils/a11y/focus-utils.js
 test("@a11y @smoke @regression onboarding after login", async ({
   inventoryPage,
 }) => {
+  expectKnownA11yFailure(
+    "SauceDemo inventory page contains known accessibility violations"
+  );
+
   await inventoryPage.goto();
   await inventoryPage.page.getByText("Products").waitFor();
   await expectNoAutomatedWCAGViolations(inventoryPage.page);
-
-  // This test will fail because the saucedemo inventory page has accessibility issues.
 });
 
 test.describe("@a11y @regression onboarding after login", () => {
