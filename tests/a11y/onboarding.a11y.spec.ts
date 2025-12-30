@@ -1,9 +1,9 @@
-import { test, expect } from "../../src/fixtures/auth.fixture.js";
+import { test, expect } from "../../src/fixtures/auth.fixture";
 import { expectKnownA11yFailure } from "../../src/utils/a11y/known-failures";
-import { expectNoSeriousOrCriticalAxeViolations } from "../../src/utils/a11y/assertions.js";
-import { tabUntil } from "../../src/utils/a11y/tab-until.js";
-import { routes } from "../../src/utils/routes.js";
-import { getActiveElementFocusStyles } from "../../src/utils/a11y/focus-utils.js";
+import { expectNoSeriousOrCriticalAxeViolations } from "../../src/utils/a11y/assertions";
+import { tabUntil } from "../../src/utils/a11y/tab-until";
+import { routes } from "../../src/utils/routes";
+import { getActiveElementFocusStyles } from "../../src/utils/a11y/focus-utils";
 import type { ActiveElementInfo } from "../../src/utils/a11y/focus-utils";
 
 const isAddToCartButtonFocused = (info: ActiveElementInfo | null) =>

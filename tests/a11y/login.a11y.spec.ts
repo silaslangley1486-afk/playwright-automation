@@ -1,12 +1,12 @@
-import { test, expect } from "../../src/fixtures/auth.fixture.js";
+import { test, expect } from "../../src/fixtures/auth.fixture";
 import { expectKnownA11yFailure } from "../../src/utils/a11y/known-failures";
-import { expectNoSeriousOrCriticalAxeViolations } from "../../src/utils/a11y/assertions.js";
-import { tabUntil } from "../../src/utils/a11y/tab-until.js";
+import { expectNoSeriousOrCriticalAxeViolations } from "../../src/utils/a11y/assertions";
+import { tabUntil } from "../../src/utils/a11y/tab-until";
 import { validUserName, validPassword } from "../../src/test-data/users";
 import {
   getActiveElementInfo,
   getActiveElementFocusStyles,
-} from "../../src/utils/a11y/focus-utils.js";
+} from "../../src/utils/a11y/focus-utils";
 import type { ActiveElementInfo } from "../../src/utils/a11y/focus-utils";
 
 const isUsernameInputFocused = (info: ActiveElementInfo | null) =>

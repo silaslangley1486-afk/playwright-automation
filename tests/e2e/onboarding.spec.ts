@@ -1,9 +1,9 @@
 // Tests covering the post-login onboarding flow (first-time authenticated experience)
 
-import { test, expect } from "../../src/fixtures/auth.fixture.js";
-import { routes } from "../../src/utils/routes.js";
+import { test, expect } from "../../src/fixtures/auth.fixture";
+import { routes } from "../../src/utils/routes";
 import { InventoryPage } from "../../pages/inventory-page";
-import { currencyRegex } from "../../src/utils/regex.js";
+import { currencyRegex } from "../../src/utils/regex";
 
 test.describe("@smoke onboarding", () => {
   test.describe.configure({ mode: "serial", retries: 0, timeout: 25_000 });
