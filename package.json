@@ -12,7 +12,8 @@
     "test:ui": "playwright test --ui",
     "test:a11y": "playwright test tests/a11y",
     "test:regression": "playwright test --project=*-regression",
-    "test:smoke": "playwright test --project=*-smoke"
+    "test:smoke": "playwright test --project=*-smoke",
+    "test:codegen": "playwright test tests/codegen"
   },
   "keywords": [],
   "author": "",
