@@ -1,28 +1,27 @@
 import { test, expect } from "../../src/fixtures/auth.fixture.js";
-import { expectNoSeriousA11yViolations } from "./asssertions";
+import { expectNoAutomatedWCAGViolations } from "../../src/utils/a11y/asssertions.js";
 import { validUserName, validPassword } from "../../src/test-data/users";
 import {
   getActiveElementInfo,
   getActiveElementFocusStyles,
-} from "./focusUtils";
+} from "../../src/utils/a11y/focusUtils.js";
 
 test.describe("@a11y @smoke login", () => {
-  test("login page has no serious a11y violations", async ({
-    loginPage,
-    page,
-  }) => {
-    await expectNoSeriousA11yViolations(page);
+  test("login page has no serious a11y violations", async ({ page }) => {
+    await expectNoAutomatedWCAGViolations(page);
+
+    // This test will fail because the saucedemo login page has accessibility issues.
   });
 });
 
 test.describe("@a11y @regression login", () => {
   test("login error state is accessible", async ({ loginPage, page }) => {
     await loginPage.triggerErrorState();
-    await expectNoSeriousA11yViolations(page, {
+    await expectNoAutomatedWCAGViolations(page, {
       scope: "#login_button_container",
     });
 
-    //This test will fail since saucedemo does have a button with accessibility issues.
+    // This test will fail since saucedemo does have a login button with accessibility issues.
   });
 
   test("login error focus behavior (observation)", async ({

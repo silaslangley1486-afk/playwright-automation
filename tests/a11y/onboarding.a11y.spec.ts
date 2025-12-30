@@ -1,14 +1,14 @@
 import { test, expect } from "../../src/fixtures/auth.fixture.js";
-import { expectNoSeriousA11yViolations } from "./asssertions.js";
+import { expectNoAutomatedWCAGViolations } from "../../src/utils/a11y/asssertions.js";
 import { routes } from "../../src/utils/routes.js";
-import { getActiveElementFocusStyles } from "./focusUtils";
+import { getActiveElementFocusStyles } from "../../src/utils/a11y/focusUtils.js";
 
 test("@a11y @smoke @regression onboarding after login", async ({
   inventoryPage,
 }) => {
   await inventoryPage.goto();
   await inventoryPage.page.getByText("Products").waitFor();
-  await expectNoSeriousA11yViolations(inventoryPage.page);
+  await expectNoAutomatedWCAGViolations(inventoryPage.page);
 
   // This test will fail because the saucedemo inventory page has accessibility issues.
 });
@@ -17,7 +17,7 @@ test.describe("@a11y @regression onboarding after login", () => {
   test("inventory with menu open is accessible", async ({ inventoryPage }) => {
     await inventoryPage.goto();
     await inventoryPage.burgerMenuButton.click();
-    await expectNoSeriousA11yViolations(inventoryPage.page, {
+    await expectNoAutomatedWCAGViolations(inventoryPage.page, {
       scope: ".bm-menu-wrap",
     });
   });
@@ -27,7 +27,7 @@ test.describe("@a11y @regression onboarding after login", () => {
   }) => {
     await inventoryPage.goto();
     await inventoryPage.addToCart();
-    await expectNoSeriousA11yViolations(inventoryPage.page, {
+    await expectNoAutomatedWCAGViolations(inventoryPage.page, {
       scope: "#inventory_container",
     });
   });
