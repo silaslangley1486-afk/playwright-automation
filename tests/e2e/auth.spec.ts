@@ -112,7 +112,7 @@ test.describe("@regression login", () => {
     await expect(page).toHaveURL(routes.login);
   });
 
-  test("session is preserved after navigation", async ({ loggedInPage }) => {
+  test("login persists session after navigation", async ({ loggedInPage }) => {
     await loggedInPage.goto(routes.inventory);
     await expect(loggedInPage).toHaveURL(routes.inventory);
     await loggedInPage.goto(routes.cart);
@@ -121,7 +121,9 @@ test.describe("@regression login", () => {
     await expect(loggedInPage).toHaveURL(routes.inventory);
   });
 
-  test("session is preserved after page reload", async ({ loggedInPage }) => {
+  test("login persists session across page reloads", async ({
+    loggedInPage,
+  }) => {
     await loggedInPage.goto(routes.inventory);
     await expect(loggedInPage).toHaveURL(routes.inventory);
     await loggedInPage.reload();
