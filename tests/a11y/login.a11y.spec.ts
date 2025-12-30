@@ -4,7 +4,7 @@ import { validUserName, validPassword } from "../../src/test-data/users";
 import {
   getActiveElementInfo,
   getActiveElementFocusStyles,
-} from "../../src/utils/a11y/focusUtils.js";
+} from "../../src/utils/a11y/focus-utils.js";
 
 test.describe("@a11y @smoke login", () => {
   test("login page has no serious a11y violations", async ({ page }) => {
