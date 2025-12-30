@@ -9,7 +9,10 @@
   "scripts": {
     "test": "playwright test",
     "test:headed": "playwright test --headed",
-    "test:ui": "playwright test --ui"
+    "test:ui": "playwright test --ui",
+    "test:a11y": "playwright test tests/a11y",
+    "test:regression": "playwright test --project=*-regression",
+    "test:smoke": "playwright test --project=*-smoke"
   },
   "keywords": [],
   "author": "",

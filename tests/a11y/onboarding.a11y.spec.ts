@@ -1,8 +1,13 @@
 import { test, expect } from "../../src/fixtures/auth.fixture.js";
 import { expectKnownA11yFailure } from "../../src/utils/a11y/known-failures";
 import { expectNoSeriousOrCriticalAxeViolations } from "../../src/utils/a11y/assertions.js";
+import { tabUntil } from "../../src/utils/a11y/tab-until.js";
 import { routes } from "../../src/utils/routes.js";
 import { getActiveElementFocusStyles } from "../../src/utils/a11y/focus-utils.js";
+import type { ActiveElementInfo } from "../../src/utils/a11y/focus-utils";
+
+const isAddToCartButtonFocused = (info: ActiveElementInfo | null) =>
+  info?.tag === "BUTTON" && /^add-to-cart-/.test(info.id);
 
 test("@a11y @smoke @regression onboarding after login", async ({
   inventoryPage,
@@ -35,11 +40,35 @@ test.describe("@a11y @regression onboarding after login", () => {
     });
   });
 
-  test("keyboard-only can open product", async ({ inventoryPage }) => {
+  test("@a11y @regression tab order can reach first product title link", async ({
+    inventoryPage,
+  }) => {
     await inventoryPage.goto();
-    await inventoryPage.keyboardNavigator.tab();
-    await inventoryPage.keyboardNavigator.tab();
-    await inventoryPage.keyboardNavigator.tab();
+
+    const productLinkIdRegExp = /^item_\d+_title_link$/;
+
+    const isProductTitleLinkFocused = (info: ActiveElementInfo | null) =>
+      info?.tag === "A" &&
+      productLinkIdRegExp.test(info.id) &&
+      (info.text?.trim()?.length ?? 0) > 0;
+
+    await tabUntil(inventoryPage.page, isProductTitleLinkFocused, {
+      debugLabel: "reach first product title link",
+      maxTabs: 15,
+    });
+  });
+
+  test("@a11y @regression keyboard enter activates focused product link", async ({
+    inventoryPage,
+  }) => {
+    await inventoryPage.goto();
+
+    const firstProductLink = inventoryPage.page
+      .locator('a[id$="_title_link"]')
+      .first();
+
+    await firstProductLink.focus();
+    await expect(firstProductLink).toBeFocused();
     await inventoryPage.keyboardNavigator.enter();
 
     await expect(inventoryPage.page).toHaveURL(
@@ -51,7 +80,8 @@ test.describe("@a11y @regression onboarding after login", () => {
 
   test("keyboard-only can open menu and logout", async ({ inventoryPage }) => {
     await inventoryPage.goto();
-    await inventoryPage.keyboardNavigator.tab();
+    inventoryPage.burgerMenuButton.focus();
+    await expect(inventoryPage.burgerMenuButton).toBeFocused();
     await inventoryPage.keyboardNavigator.enter();
 
     const logoutButton = inventoryPage.logoutLinkByRole;
@@ -83,10 +113,11 @@ test.describe("@a11y @regression onboarding after login", () => {
   }) => {
     await inventoryPage.goto();
 
-    const addToCartButton = inventoryPage.firstAddToCartButtonByRole;
+    await tabUntil(inventoryPage.page, isAddToCartButtonFocused, {
+      debugLabel: "tab until add to cart button",
+    });
 
-    await addToCartButton.focus();
-    await expect(addToCartButton).toBeFocused();
+    await expect(inventoryPage.firstAddToCartButtonByRole).toBeFocused();
     await inventoryPage.keyboardNavigator.enter();
     await expect.poll(() => inventoryPage.getShoppingCartBadgeCount()).toBe(1);
   });

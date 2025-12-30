@@ -1,11 +1,23 @@
 import { test, expect } from "../../src/fixtures/auth.fixture.js";
 import { expectKnownA11yFailure } from "../../src/utils/a11y/known-failures";
 import { expectNoSeriousOrCriticalAxeViolations } from "../../src/utils/a11y/assertions.js";
+import { tabUntil } from "../../src/utils/a11y/tab-until.js";
 import { validUserName, validPassword } from "../../src/test-data/users";
 import {
   getActiveElementInfo,
   getActiveElementFocusStyles,
 } from "../../src/utils/a11y/focus-utils.js";
+import type { ActiveElementInfo } from "../../src/utils/a11y/focus-utils";
+
+const isUsernameInputFocused = (info: ActiveElementInfo | null) =>
+  info?.tag === "INPUT" && /^user-name$/i.test(info.id);
+
+const isPasswordInputFocused = (info: ActiveElementInfo | null) =>
+  info?.tag === "INPUT" && /^password$/i.test(info.id);
+
+const isLoginButtonFocused = (info: ActiveElementInfo | null) =>
+  (info?.tag === "INPUT" || info?.tag === "BUTTON") &&
+  info.id === "login-button";
 
 test.describe("@a11y @smoke login", () => {
   test("login page has no serious a11y violations", async ({ page }) => {
@@ -62,15 +74,22 @@ test.describe("@a11y @regression login", () => {
   });
 
   test("keyboard-only login works", async ({ loginPage, inventoryPage }) => {
-    await loginPage.keyboardNavigator.tab();
+    await tabUntil(loginPage.page, isUsernameInputFocused, {
+      debugLabel: "tab until username input",
+    });
+    await expect(loginPage.usernameInput).toBeFocused();
     await loginPage.typeUsername(validUserName);
 
-    await loginPage.keyboardNavigator.tab();
+    await tabUntil(loginPage.page, isPasswordInputFocused, {
+      debugLabel: "tab until password input",
+    });
+    await expect(loginPage.passwordInput).toBeFocused();
     await loginPage.typePassword(validPassword);
 
-    await loginPage.keyboardNavigator.tab();
+    await tabUntil(loginPage.page, isLoginButtonFocused, {
+      debugLabel: "tab until login button",
+    });
     await expect(loginPage.loginButton).toBeFocused();
-
     await loginPage.keyboardNavigator.enter();
     await expect(inventoryPage.title).toBeVisible();
   });

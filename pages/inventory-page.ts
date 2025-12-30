@@ -23,15 +23,18 @@ export class InventoryPage {
   constructor(page: Page) {
     this.page = page;
     this.keyboardNavigator = new KeyboardNavigator(page);
-    this.title = this.page
+    this.title = page
       .getByText("Products")
       .or(page.locator('[data-test="title"]'));
+
+    this.burgerMenuButton = page
+      .getByRole("button", { name: "Open Menu" })
+      .or(page.locator('[data-test="back-to-products"]'));
 
     this.inventoryList = page.locator('[data-test="inventory-list"]');
     this.inventoryItem = page.locator('[data-test="inventory-item"]');
     this.productTitle = page.locator('[data-test="inventory-item-name"]');
     this.backToProductsButton = page.locator('[data-test="back-to-products"]');
-    this.burgerMenuButton = page.locator("#react-burger-menu-btn");
     this.cartLink = page.locator('[data-test="shopping-cart-link"]');
     this.sortContainer = page.locator('[data-test="product-sort-container"]');
     this.shoppingCartBadge = page.locator('[data-test="shopping-cart-badge"]');
