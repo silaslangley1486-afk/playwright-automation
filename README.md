@@ -1,0 +1,112 @@
+# QA Automation Portfolio
+
+This repository demonstrates a Playwright-based automation approach focused on accessibility-aware end-to-end testing using TypeScript. It is intentionally scoped to model production-style QA strategies rather than provide a comprehensive test suite.
+
+The tests target the public demo application at:
+https://www.saucedemo.com/
+
+## Purpose and Scope
+
+The goal of this project is to demonstrate:
+
+- Structuring Playwright tests using page object models and fixtures
+
+- Writing maintainable, deterministic automation in TypeScript
+
+- Dividing into smoke and regression tests across Chromium, Firefox, and WebKit
+
+- Incorporating accessibility testing into E2E workflows
+
+- Validating keyboard-only navigation, ARIA roles, and semantic structure
+
+- Using axe-core to identify automated WCAG issues
+
+To keep the focus on test design and quality, the test coverage is intentionally limited to:
+
+- The login flow
+
+- Post-login onboarding behavior on the inventory page
+
+## How To Run
+
+This repo targets the public SauceDemo site and requires no local app setup.
+
+### Prerequisites:
+
+- Node.js (v18+ recommended)
+
+### Install Dependencies:
+
+```bash
+npm install
+```
+
+### If this is your first time running Playwright:
+
+```bash
+npx playwright install
+```
+
+### Run Tests:
+
+```bash
+npm run test:smoke
+npm run test:regression
+npm run test:a11y
+```
+
+### Show report:
+
+```bash
+npx playwright show-report
+```
+
+### Optional: run tests interactively
+
+Run tests in headed mode (browser visible):
+
+```bash
+npm run test:headed
+```
+
+Launch Playwright UI mode:
+
+```bash
+npm run test:ui
+```
+
+## Test Structure
+
+Page models
+
+- LoginPage and InventoryPage encapsulate selectors and user interactions
+
+Fixtures
+
+- Authentication and setup logic are handled via Playwright fixtures to support reusable test setup
+
+Accessibility tests (/a11y)
+
+- Accessibility checks are separated to emphasize accessibility as a first-class concern rather than an afterthought
+
+- Includes axe-core scans, keyboard navigation validation, and role-based queries
+
+Auto-generated tests (/auto-generated)
+
+- Contains tests generated via Playwright’s codegen tool from manual exploratory testing
+
+- Included for comparison and evaluation against hand-written, maintainable test code
+
+## Design Principles
+
+- Tests favor role-based selectors and user-centric interactions
+
+- Accessibility is validated as part of normal user workflows, not as a separate audit step
+
+- The project prioritizes clarity and maintainability over test quantity
+
+## Notes
+
+This repository is intended as a portfolio example illustrating how accessibility-aware automation can be integrated into modern QA workflows. It is not intended to represent full application coverage or production test volume. Some areas are intentionally left minimal to keep the focus on test design rather than complete coverage.
+
+Some accessibility tests will fail since the saucedemo site has some a11y violations. Comments are added to those tests to clarify that they are expected to fail.

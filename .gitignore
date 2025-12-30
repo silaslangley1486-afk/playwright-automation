@@ -1,16 +1,40 @@
-/node_modules
-/dist
-/.env
-.DS_Store
-/logs
-/coverage
+# ------------------------------
+# Node / Typescript
+# ------------------------------
+node_modules/
+dist/
+build/
 *.log
 *.tmp
-.idea/
-.vscode/
+*.cache
 *.swp
 *.bak
 *.old
-/build
-/.cache
-/.parcel-cache
+
+# ------------------------------
+# Environment & system files
+# ------------------------------
+.env
+.env.*
+.DS_Store
+Thumbs.db
+
+# IDE / Editor files
+.idea/
+.vscode/
+
+# ------------------------------
+# Playwright
+# ------------------------------
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+trace.zip
+
+# ------------------------------
+# OS-specific or misc
+# ------------------------------
+logs/
+coverage/
