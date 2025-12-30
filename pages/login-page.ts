@@ -32,7 +32,6 @@ export class LoginPage {
       .getByRole("button", { name: "Login" })
       .or(page.locator('[data-test="login-button"]'));
 
-    this.loginButton = page.locator('[data-test="login-button"]');
     this.errorMessage = page.locator('[data-test="error"]');
     this.errorDismissButton = page.locator('[data-test="error-button"]');
     this.burgerMenuButton = page.locator("#react-burger-menu-btn");
