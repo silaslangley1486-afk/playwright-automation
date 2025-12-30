@@ -1,5 +1,5 @@
 import { test, expect } from "../../src/fixtures/auth.fixture.js";
-import { expectNoAutomatedWCAGViolations } from "../../src/utils/a11y/asssertions.js";
+import { expectNoAutomatedWCAGViolations } from "../../src/utils/a11y/assertions.js";
 import { routes } from "../../src/utils/routes.js";
 import { getActiveElementFocusStyles } from "../../src/utils/a11y/focusUtils.js";
 
