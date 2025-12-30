@@ -13,6 +13,8 @@ The goal of this project is to demonstrate:
 
 - Writing maintainable, deterministic automation in TypeScript
 
+- Dividing into smoke and regression tests across Chromium, Firefox, and WebKit
+
 - Incorporating accessibility testing into E2E workflows
 
 - Validating keyboard-only navigation, ARIA roles, and semantic structure
