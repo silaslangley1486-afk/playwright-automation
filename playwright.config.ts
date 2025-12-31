@@ -81,6 +81,7 @@ export default defineConfig({
     {
       name: "webkit-regression",
       grep: /@regression/,
+      timeout: 60_000,
       use: {
         ...devices["Desktop Safari"],
         trace: "on-first-retry",

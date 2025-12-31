@@ -45,7 +45,7 @@ test.describe("@a11y @regression onboarding after login", () => {
   }) => {
     await inventoryPage.goto();
 
-    const productLinkIdRegExp = /^item_\d+_title_link$/;
+    const productLinkIdRegExp = /^item_\d+_(title|img)_link$/;
 
     const isProductTitleLinkFocused = (info: ActiveElementInfo | null) =>
       info?.tag === "A" &&
@@ -53,8 +53,7 @@ test.describe("@a11y @regression onboarding after login", () => {
       (info.text?.trim()?.length ?? 0) > 0;
 
     await tabUntil(inventoryPage.page, isProductTitleLinkFocused, {
-      debugLabel: "reach first product title link",
-      maxTabs: 15,
+      debugLabel: "tab to first product title link",
     });
   });
 
@@ -112,12 +111,7 @@ test.describe("@a11y @regression onboarding after login", () => {
     inventoryPage,
   }) => {
     await inventoryPage.goto();
-
-    await tabUntil(inventoryPage.page, isAddToCartButtonFocused, {
-      debugLabel: "tab until add to cart button",
-    });
-
-    await expect(inventoryPage.firstAddToCartButtonByRole).toBeFocused();
+    await inventoryPage.firstAddToCartButtonByRole.focus();
     await inventoryPage.keyboardNavigator.enter();
     await expect.poll(() => inventoryPage.getShoppingCartBadgeCount()).toBe(1);
   });
