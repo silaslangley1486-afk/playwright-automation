@@ -90,7 +90,7 @@ test.describe("@a11y @regression login", () => {
       debugLabel: "tab until login button",
     });
     await expect(loginPage.loginButton).toBeFocused();
-    await loginPage.keyboardNavigator.enter();
+    await loginPage.loginButton.press("Enter");
     await expect(inventoryPage.title).toBeVisible();
   });
 

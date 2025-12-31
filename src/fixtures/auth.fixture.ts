@@ -69,31 +69,13 @@ export const test = base.extend<AuthFixtures>({
 
   loginPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
+
     await loginPage.navigateToLoginPage();
     await use(loginPage);
   },
 
-  loggedInPage: async ({ browser }, use) => {
-    const context: BrowserContext = await browser.newContext();
-    const page: Page = await context.newPage();
-
-    const loginPage = new LoginPage(page);
-    await loginPage.navigateToLoginPage();
-    await loginPage.loginExpectSuccess({
-      username: validUserName,
-      password: validPassword,
-    });
-
-    await use(page);
-    await context.close();
-  },
-
-  loginModel: async ({ loggedInPage }, use) => {
-    await use(new LoginPage(loggedInPage));
-  },
-
-  inventoryPage: async ({ loggedInPage }, use) => {
-    await use(new InventoryPage(loggedInPage));
+  inventoryPage: async ({ page }, use) => {
+    await use(new InventoryPage(page));
   },
 });
 
