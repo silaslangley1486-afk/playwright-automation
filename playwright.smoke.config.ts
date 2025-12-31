@@ -3,6 +3,11 @@ import base from "./playwright.base.config";
 
 export default defineConfig({
   ...base,
+  globalSetup: "./global-setup.ts",
+  use: {
+    ...base.use,
+    storageState: "auth.json",
+  },
   projects: [
     {
       name: "chromium-smoke",

@@ -54,8 +54,17 @@ export class InventoryPage {
       .getByRole("link", { name: "Logout" });
   }
 
-  async goto() {
+  async goToInventoryPage() {
     await this.page.goto(routes.inventory);
+    await this.title.waitFor();
+  }
+
+  async goToCart() {
+    await this.page.goto(routes.cart);
+  }
+
+  async reload() {
+    await this.page.reload();
   }
 
   async logout() {

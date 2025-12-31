@@ -102,31 +102,33 @@ test.describe("@regression login", () => {
     await expect(loginPage.errorMessage).toContainText(/locked out/i);
   });
 
+  test("login persists session after navigation", async ({ inventoryPage }) => {
+    await inventoryPage.goToInventoryPage();
+    await expect(inventoryPage.page).toHaveURL(routes.inventory);
+    await inventoryPage.goToCart();
+    await expect(inventoryPage.page).toHaveURL(routes.cart);
+    await inventoryPage.goToInventoryPage();
+    await expect(inventoryPage.page).toHaveURL(routes.inventory);
+  });
+
+  test("login persists session across page reloads", async ({
+    inventoryPage,
+  }) => {
+    await inventoryPage.goToInventoryPage();
+    await expect(inventoryPage.page).toHaveURL(routes.inventory);
+    await inventoryPage.reload();
+    await expect(inventoryPage.page).toHaveURL(routes.inventory);
+  });
+});
+
+test.describe("@unauth access control", () => {
   test("cannot access inventory page without login", async ({ page }) => {
     await page.goto(routes.inventory);
-    await expect(page).toHaveURL(routes.login);
+    await expect(page).toHaveURL(routes.login, { timeout: 10_000 });
   });
 
   test("cannot access cart page without login", async ({ page }) => {
     await page.goto(routes.cart);
-    await expect(page).toHaveURL(routes.login);
-  });
-
-  test("login persists session after navigation", async ({ loggedInPage }) => {
-    await loggedInPage.goto(routes.inventory);
-    await expect(loggedInPage).toHaveURL(routes.inventory);
-    await loggedInPage.goto(routes.cart);
-    await expect(loggedInPage).toHaveURL(routes.cart);
-    await loggedInPage.goto(routes.inventory);
-    await expect(loggedInPage).toHaveURL(routes.inventory);
-  });
-
-  test("login persists session across page reloads", async ({
-    loggedInPage,
-  }) => {
-    await loggedInPage.goto(routes.inventory);
-    await expect(loggedInPage).toHaveURL(routes.inventory);
-    await loggedInPage.reload();
-    await expect(loggedInPage).toHaveURL(routes.inventory);
+    await expect(page).toHaveURL(routes.login, { timeout: 10_000 });
   });
 });

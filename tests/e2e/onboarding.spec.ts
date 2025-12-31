@@ -9,14 +9,14 @@ test.describe("@smoke onboarding", () => {
   test.describe.configure({ mode: "serial", retries: 0, timeout: 25_000 });
 
   test("@smoke inventory is usable", async ({ inventoryPage }) => {
-    await inventoryPage.goto();
+    await inventoryPage.goToInventoryPage();
     await expect(inventoryPage.inventoryList).toBeVisible();
     await expect(inventoryPage.cartLink).toBeVisible();
     await expect(inventoryPage.burgerMenuButton).toBeVisible();
   });
 
   test("logout via side menu works correctly", async ({ inventoryPage }) => {
-    await inventoryPage.goto();
+    await inventoryPage.goToInventoryPage();
     await inventoryPage.logout();
     await expect(inventoryPage.page).toHaveURL(routes.login);
   });
@@ -24,7 +24,7 @@ test.describe("@smoke onboarding", () => {
   test("add to cart works correctly from inventory page", async ({
     inventoryPage,
   }) => {
-    await inventoryPage.goto();
+    await inventoryPage.goToInventoryPage();
 
     const firstProductName = await inventoryPage.getFirstProductName();
 
@@ -63,7 +63,7 @@ test.describe("@regression onboarding / post-login", () => {
   test("post-login landing shows main inventory page content", async ({
     inventoryPage,
   }) => {
-    await inventoryPage.goto();
+    await inventoryPage.goToInventoryPage();
     await expect.soft(inventoryPage.inventoryList).toBeVisible();
     await expect.soft(inventoryPage.burgerMenuButton).toBeVisible();
     await expect.soft(inventoryPage.title).toBeVisible();
@@ -74,7 +74,7 @@ test.describe("@regression onboarding / post-login", () => {
   test("post-login landing shows at least one product card with product title and price", async ({
     inventoryPage,
   }) => {
-    await inventoryPage.goto();
+    await inventoryPage.goToInventoryPage();
 
     expect(await inventoryPage.hasAProduct()).toBe(true);
     expect(await inventoryPage.hasAProductNameAndPrice()).toBe(true);
@@ -87,7 +87,7 @@ test.describe("@regression onboarding / post-login", () => {
   test("product details page opens when clicking a product title from inventory", async ({
     inventoryPage,
   }) => {
-    await inventoryPage.goto();
+    await inventoryPage.goToInventoryPage();
 
     const firstProductName = await inventoryPage.getFirstProductName();
 
@@ -104,7 +104,7 @@ test.describe("@regression onboarding / post-login", () => {
   });
 
   test("cart is empty for authenticated user", async ({ inventoryPage }) => {
-    await inventoryPage.goto();
+    await inventoryPage.goToInventoryPage();
     await expect(inventoryPage.shoppingCartBadge).toHaveCount(0);
   });
 });
