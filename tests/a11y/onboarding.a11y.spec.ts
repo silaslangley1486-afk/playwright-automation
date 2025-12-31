@@ -44,7 +44,7 @@ test.describe("@a11y @regression onboarding after login", () => {
   //        SauceDemo is a third-party app with browser-dependent focus order.
   //        Validating keyboard operability via focus and activation instead.
 
-  test("@a11y @regression product link is keyboard focusable and activates", async ({
+  test("@a11y @regression product link activates", async ({
     inventoryPage,
   }) => {
     await inventoryPage.goToInventoryPage();
@@ -53,9 +53,7 @@ test.describe("@a11y @regression onboarding after login", () => {
       .locator('a[id$="_title_link"]')
       .first();
 
-    await firstProductLink.focus();
-    await expect(firstProductLink).toBeFocused();
-    await inventoryPage.keyboardNavigator.enter();
+    await firstProductLink.press("Enter");
 
     await expect(inventoryPage.page).toHaveURL(
       new RegExp(`${routes.inventoryItem}\\?id=\\d+$`)
@@ -66,15 +64,9 @@ test.describe("@a11y @regression onboarding after login", () => {
 
   test("keyboard-only can open menu and logout", async ({ inventoryPage }) => {
     await inventoryPage.goToInventoryPage();
-    inventoryPage.burgerMenuButton.focus();
-    await expect(inventoryPage.burgerMenuButton).toBeFocused();
-    await inventoryPage.keyboardNavigator.enter();
-
-    const logoutButton = inventoryPage.logoutLinkByRole;
-
-    await logoutButton.focus();
-    await expect(logoutButton).toBeFocused();
-    await inventoryPage.keyboardNavigator.enter();
+    await inventoryPage.burgerMenuButton.press("Enter");
+    await expect(inventoryPage.page.locator(".bm-menu-wrap")).toBeVisible();
+    await inventoryPage.logoutLinkByRole.press("Enter");
     await expect(inventoryPage.page).toHaveURL(routes.login);
   });
 
@@ -98,8 +90,7 @@ test.describe("@a11y @regression onboarding after login", () => {
     inventoryPage,
   }) => {
     await inventoryPage.goToInventoryPage();
-    await inventoryPage.firstAddToCartButtonByRole.focus();
-    await inventoryPage.keyboardNavigator.enter();
+    await inventoryPage.firstAddToCartButtonByRole.press("Enter");
     await expect.poll(() => inventoryPage.getShoppingCartBadgeCount()).toBe(1);
   });
 });

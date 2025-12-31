@@ -105,6 +105,11 @@ Auto-generated tests (/auto-generated)
 
 - The project prioritizes clarity and maintainability over test quantity
 
+### Authentication strategy
+
+Most tests run using a pre-authenticated session (`auth.json`) generated via Playwright global setup.
+Access-control tests are tagged `@unauth` and run in dedicated unauthenticated projects.
+
 ## Notes
 
 This repository is intended as a portfolio example illustrating how accessibility-aware automation can be integrated into modern QA workflows. It is not intended to represent full application coverage or production test volume. Some areas are intentionally left minimal to keep the focus on test design rather than complete coverage.

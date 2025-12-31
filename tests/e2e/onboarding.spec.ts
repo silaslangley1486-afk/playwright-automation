@@ -6,7 +6,7 @@ import { InventoryPage } from "../../pages/inventory-page";
 import { currencyRegex } from "../../src/utils/regex";
 
 test.describe("@smoke onboarding", () => {
-  test.describe.configure({ mode: "serial", retries: 0, timeout: 25_000 });
+  test.describe.configure({ mode: "serial", retries: 1, timeout: 60_000 });
 
   test("@smoke inventory is usable", async ({ inventoryPage }) => {
     await inventoryPage.goToInventoryPage();

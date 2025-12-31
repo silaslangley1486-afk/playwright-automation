@@ -1,10 +1,8 @@
 import { Page, Locator } from "@playwright/test";
 import { routes } from "../src/utils/routes";
-import { KeyboardNavigator } from "../src/utils/keyboard-navigator";
 
 export class InventoryPage {
   readonly page: Page;
-  readonly keyboardNavigator: KeyboardNavigator;
   readonly title: Locator;
   readonly inventoryList: Locator;
   readonly inventoryItem: Locator;
@@ -22,7 +20,6 @@ export class InventoryPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.keyboardNavigator = new KeyboardNavigator(page);
     this.title = page
       .getByText("Products")
       .or(page.locator('[data-test="title"]'));
@@ -55,8 +52,14 @@ export class InventoryPage {
   }
 
   async goToInventoryPage() {
-    await this.page.goto(routes.inventory);
-    await this.title.waitFor();
+    if (this.page.isClosed()) {
+      throw new Error(
+        "goToInventoryPage: page already closed before navigation"
+      );
+    }
+
+    await this.page.goto(routes.inventory, { waitUntil: "domcontentloaded" });
+    await this.title.waitFor({ state: "visible", timeout: 30_000 });
   }
 
   async goToCart() {

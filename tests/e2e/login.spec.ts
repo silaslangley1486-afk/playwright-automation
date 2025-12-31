@@ -14,6 +14,9 @@ test.describe("@smoke login", () => {
   });
 });
 
+// Login regression tests should run unauthenticated even if projects are authenticated.
+test.use({ storageState: undefined });
+
 test.describe("@regression login", () => {
   test.describe.configure({ mode: "parallel", retries: 1, timeout: 30_000 });
 
@@ -118,17 +121,5 @@ test.describe("@regression login", () => {
     await expect(inventoryPage.page).toHaveURL(routes.inventory);
     await inventoryPage.reload();
     await expect(inventoryPage.page).toHaveURL(routes.inventory);
-  });
-});
-
-test.describe("@unauth access control", () => {
-  test("cannot access inventory page without login", async ({ page }) => {
-    await page.goto(routes.inventory);
-    await expect(page).toHaveURL(routes.login, { timeout: 10_000 });
-  });
-
-  test("cannot access cart page without login", async ({ page }) => {
-    await page.goto(routes.cart);
-    await expect(page).toHaveURL(routes.login, { timeout: 10_000 });
   });
 });

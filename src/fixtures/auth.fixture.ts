@@ -74,62 +74,9 @@ export const test = base.extend<AuthFixtures>({
     await use(loginPage);
   },
 
-  // loggedInPage: async ({ browser }, use) => {
-  //   const context: BrowserContext = await browser.newContext();
-  //   const page: Page = await context.newPage();
-
-  //   const loginPage = new LoginPage(page);
-  //   await loginPage.navigateToLoginPage();
-  //   await loginPage.loginExpectSuccess({
-  //     username: validUserName,
-  //     password: validPassword,
-  //   });
-
-  //   await use(page);
-  //   await context.close();
-  // },
-
-  // loginModel: async ({ loggedInPage }, use) => {
-  //   await use(new LoginPage(loggedInPage));
-  // },
-
   inventoryPage: async ({ page }, use) => {
     await use(new InventoryPage(page));
   },
 });
 
 export { expect } from "@playwright/test";
-
-// import { test as base, expect } from "@playwright/test";
-// import { LoginPage } from "../../pages/login-page";
-// import { InventoryPage } from "../../pages/inventory-page";
-// import { validUserName, validPassword, wrongUserName, wrongPassword, lockedOutUserName } from "../test-data/users";
-// import type { User } from "../types/auth.types";
-
-// export type AuthFixtures = {
-//   validUser: User;
-//   emptyUsername: User;
-//   emptyPassword: User;
-//   wrongUsername: User;
-//   wrongPassword: User;
-//   lockedOutUser: User;
-
-//   loginPage: LoginPage;       // unauthenticated POM
-//   inventoryPage: InventoryPage; // authenticated POM (via storageState)
-// };
-
-// export const test = base.extend<AuthFixtures>({
-//   // user fixtures unchanged...
-
-//   loginPage: async ({ page }, use) => {
-//     const loginPage = new LoginPage(page);
-//     await loginPage.navigateToLoginPage();
-//     await use(loginPage);
-//   },
-
-//   inventoryPage: async ({ page }, use) => {
-//     await use(new InventoryPage(page));
-//   },
-// });
-
-// export { expect } from "@playwright/test";
