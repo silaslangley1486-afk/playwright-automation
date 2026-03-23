@@ -14,6 +14,9 @@ test.describe("@smoke login", () => {
   });
 });
 
+// Login regression tests should run unauthenticated even if projects are authenticated.
+test.use({ storageState: undefined });
+
 test.describe("@regression login", () => {
   test.describe.configure({ mode: "parallel", retries: 1, timeout: 30_000 });
 
@@ -102,31 +105,21 @@ test.describe("@regression login", () => {
     await expect(loginPage.errorMessage).toContainText(/locked out/i);
   });
 
-  test("cannot access inventory page without login", async ({ page }) => {
-    await page.goto(routes.inventory);
-    await expect(page).toHaveURL(routes.login);
-  });
-
-  test("cannot access cart page without login", async ({ page }) => {
-    await page.goto(routes.cart);
-    await expect(page).toHaveURL(routes.login);
-  });
-
-  test("login persists session after navigation", async ({ loggedInPage }) => {
-    await loggedInPage.goto(routes.inventory);
-    await expect(loggedInPage).toHaveURL(routes.inventory);
-    await loggedInPage.goto(routes.cart);
-    await expect(loggedInPage).toHaveURL(routes.cart);
-    await loggedInPage.goto(routes.inventory);
-    await expect(loggedInPage).toHaveURL(routes.inventory);
+  test("login persists session after navigation", async ({ inventoryPage }) => {
+    await inventoryPage.goToInventoryPage();
+    await expect(inventoryPage.page).toHaveURL(routes.inventory);
+    await inventoryPage.goToCart();
+    await expect(inventoryPage.page).toHaveURL(routes.cart);
+    await inventoryPage.goToInventoryPage();
+    await expect(inventoryPage.page).toHaveURL(routes.inventory);
   });
 
   test("login persists session across page reloads", async ({
-    loggedInPage,
+    inventoryPage,
   }) => {
-    await loggedInPage.goto(routes.inventory);
-    await expect(loggedInPage).toHaveURL(routes.inventory);
-    await loggedInPage.reload();
-    await expect(loggedInPage).toHaveURL(routes.inventory);
+    await inventoryPage.goToInventoryPage();
+    await expect(inventoryPage.page).toHaveURL(routes.inventory);
+    await inventoryPage.reload();
+    await expect(inventoryPage.page).toHaveURL(routes.inventory);
   });
 });

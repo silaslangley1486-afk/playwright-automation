@@ -2,11 +2,9 @@ import { Page, Locator } from "@playwright/test";
 import { routes } from "../src/utils/routes";
 import type { User } from "../src/types/auth.types";
 import { wrongPassword, lockedOutUserName } from "../src/test-data/users";
-import { KeyboardNavigator } from "../src/utils/keyboard-navigator";
 
 export class LoginPage {
   readonly page: Page;
-  readonly keyboardNavigator: KeyboardNavigator;
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
@@ -17,7 +15,6 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.keyboardNavigator = new KeyboardNavigator(page);
     this.usernameInput = page
       .getByLabel("Username")
       .or(page.getByPlaceholder("Username"))
