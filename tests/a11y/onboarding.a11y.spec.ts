@@ -1,7 +1,6 @@
 import { test, expect } from "../../src/fixtures/auth.fixture";
 import { expectKnownA11yFailure } from "../../src/utils/a11y/known-failures";
 import { expectNoSeriousOrCriticalAxeViolations } from "../../src/utils/a11y/assertions";
-import { tabUntil } from "../../src/utils/a11y/tab-until";
 import { routes } from "../../src/utils/routes";
 import { getActiveElementFocusStyles } from "../../src/utils/a11y/focus-utils";
 import type { ActiveElementInfo } from "../../src/utils/a11y/focus-utils";
@@ -13,7 +12,7 @@ test("@a11y @smoke @regression onboarding after login", async ({
   inventoryPage,
 }) => {
   expectKnownA11yFailure(
-    "SauceDemo inventory page contains known accessibility violations"
+    "SauceDemo inventory page contains known accessibility violations",
   );
 
   await inventoryPage.goToInventoryPage();
@@ -56,7 +55,7 @@ test.describe("@a11y @regression onboarding after login", () => {
     await firstProductLink.press("Enter");
 
     await expect(inventoryPage.page).toHaveURL(
-      new RegExp(`${routes.inventoryItem}\\?id=\\d+$`)
+      new RegExp(`${routes.inventoryItem}\\?id=\\d+$`),
     );
 
     await expect(inventoryPage.productTitle).toBeVisible();
